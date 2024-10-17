@@ -21,6 +21,7 @@ class User extends Authenticatable
     protected $fillable = [
         'employee_id', // New field
         'name',
+        'nic', // Add NIC field
         'department_name', // New field
         'join_or_transfer', // New field
         'date', // New field

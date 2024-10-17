@@ -1,5 +1,5 @@
 <x-app-layout>
-    <div class="max-w-7xl mx-auto py-6 px-4">
+    <div class="max-w-full mx-auto py-6 px-4"> <!-- Set container to full width -->
 
     @include('role-permission.nav-links')
     <br>
@@ -34,23 +34,44 @@
             @endif
 
             <!-- Table Container -->
-            <div class="overflow-x-auto">
-                <table class="min-w-full border-collapse border border-gray-300">
+            <div class="overflow-x-auto w-full"> <!-- Ensure overflow and full width -->
+                <table class="min-w-full border-collapse border border-gray-300 w-full"> <!-- Set table to full width -->
                     <thead class="bg-gray-200 dark:bg-gray-700">
                         <tr>
                             <th class="border px-3 py-2 text-left text-gray-900 dark:text-gray-100 text-sm">ID</th>
+                            <th class="border px-3 py-2 text-left text-gray-900 dark:text-gray-100 text-sm">Employee ID</th>
+                            <th class="border px-3 py-2 text-left text-gray-900 dark:text-gray-100 text-sm">NIC</th>
                             <th class="border px-3 py-2 text-left text-gray-900 dark:text-gray-100 text-sm">Name</th>
                             <th class="border px-3 py-2 text-left text-gray-900 dark:text-gray-100 text-sm">Email</th>
+                            <th class="border px-3 py-2 text-left text-gray-900 dark:text-gray-100 text-sm">Department Name</th>
+                            <th class="border px-3 py-2 text-left text-gray-900 dark:text-gray-100 text-sm">Join or Transfer</th>
+                            <th class="border px-3 py-2 text-left text-gray-900 dark:text-gray-100 text-sm">Date</th>
+                            <th class="border px-3 py-2 text-left text-gray-900 dark:text-gray-100 text-sm">Roles</th>
                             <th class="border px-3 py-2 text-left text-gray-900 dark:text-gray-100 text-sm">Action</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white dark:bg-gray-800">
                         @foreach ($users as $user)
                             <tr class="bg-gray-100 dark:bg-gray-700">
-                                <td class="border px-3 py-2 text-gray-900 dark:text-gray-200 text-sm">{{ $user->id }}</td>
-                                <td class="border px-3 py-2 text-gray-900 dark:text-gray-200 text-sm">{{ $user->name }}</td>
-                                <td class="border px-3 py-2 text-gray-900 dark:text-gray-200 text-sm">{{ $user->email }}</td>
-                                <td class="border px-3 py-2 text-gray-900 dark:text-gray-200 text-sm">
+                                <td class="border px-3 py-2 text-gray-900 dark:text-gray-200 text-sm whitespace-normal break-words">{{ $user->id }}</td>
+                                <td class="border px-3 py-2 text-gray-900 dark:text-gray-200 text-sm whitespace-normal break-words">{{ $user->employee_id }}</td>
+                                <td class="border px-3 py-2 text-gray-900 dark:text-gray-200 text-sm whitespace-normal break-words">{{ $user->nic }}</td>
+                                <td class="border px-3 py-2 text-gray-900 dark:text-gray-200 text-sm whitespace-normal break-words">{{ $user->name }}</td>
+                                <td class="border px-3 py-2 text-gray-900 dark:text-gray-200 text-sm whitespace-normal break-words">{{ $user->email }}</td>
+                                <td class="border px-3 py-2 text-gray-900 dark:text-gray-200 text-sm whitespace-normal break-words">{{ $user->department_name }}</td>
+                                <td class="border px-3 py-2 text-gray-900 dark:text-gray-200 text-sm whitespace-normal break-words">{{ $user->join_or_transfer }}</td>
+                                <td class="border px-3 py-2 text-gray-900 dark:text-gray-200 text-sm whitespace-normal break-words">{{ $user->date }}</td>
+                                <td class="border px-3 py-2 text-gray-900 dark:text-gray-200 text-sm whitespace-normal break-words">
+                                    @if (!empty($user->getRoleNames()))
+                                        @foreach ($user->getRoleNames() as $rolename)
+                                            <span class="inline-block bg-indigo-600 text-white text-xs font-semibold px-2 py-1 rounded-full mx-1">
+                                                {{ $rolename }}
+                                            </span>
+                                        @endforeach
+                                    @endif
+                                </td>
+
+                                <td class="border px-3 py-2 text-gray-900 dark:text-gray-200 text-sm whitespace-normal break-words">
                                     
                                     <a href="{{ url('users/'.$user->id.'/edit') }}" 
                                     class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Edit</a>

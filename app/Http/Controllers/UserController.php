@@ -11,13 +11,11 @@ class UserController extends Controller
 {
     public function index()
     {
-        // Fetch all departments and roles
-        $departments = Department::all();
-        $roles = Role::pluck('name', 'name')->all();
+        // Fetch all users from the database
+        $users = User::all();
 
-        return view('role-permission.user.create', [
-            'departments' => $departments,
-            'roles' => $roles,
+        return view('role-permission.user.index', [
+            'users' => $users, // Pass the users to the view
         ]);
     }
 
@@ -43,6 +41,7 @@ class UserController extends Controller
         $request->validate([
             'employee_id' => 'required|string|unique:users,employee_id',
             'name' => 'required|string|max:255',
+            'nic' => 'required|string|unique:users,nic|max:20', // Add validation for NIC
             'email' => 'required|string|email|max:255|unique:users,email',
             'department_name' => 'required|string|exists:departments,department_name',
             'join_or_transfer' => 'required|in:join,transfer',
@@ -55,6 +54,7 @@ class UserController extends Controller
         $user = User::create([
             'employee_id' => $request->employee_id,
             'name' => $request->name,
+            'nic' => $request->nic,
             'email' => $request->email,
             'department_name' => $request->department_name, // You might need to link this to department ID if using relations
             'join_or_transfer' => $request->join_or_transfer,
@@ -66,5 +66,10 @@ class UserController extends Controller
 
         // Redirect back with a success message
         return redirect()->route('users.index')->with('success', 'User created successfully with roles.');
+    }
+
+    public function edit(User $user)
+    {
+        return $user;
     }
 }

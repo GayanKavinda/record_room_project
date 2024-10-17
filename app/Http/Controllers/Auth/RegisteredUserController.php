@@ -35,6 +35,7 @@ class RegisteredUserController extends Controller
         $request->validate([
             'employee_id' => ['required', 'string', 'max:255', 'unique:users'], // Assuming employee_id should be unique
             'name' => ['required', 'string', 'max:255'],
+            'nic' => 'required|string|unique:users,nic|max:20', // Add validation for NIC
             'department_name' => ['required', 'string', 'max:255'],
             'join_or_transfer' => ['required', 'in:join,transfer'], // Ensure it's either 'join' or 'transfer'
             'date' => ['required', 'date'], // Validate as a date
@@ -46,6 +47,7 @@ class RegisteredUserController extends Controller
         $user = User::create([
             'employee_id' => $request->employee_id,
             'name' => $request->name,
+            'nic' => $request->nic,  // Include NIC field
             'department_name' => $request->department_name,
             'join_or_transfer' => $request->join_or_transfer,
             'date' => $request->date,
