@@ -13,6 +13,7 @@
                class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4 inline-block">
                 Create User
             </a>
+
             <br>
             @if(session('success'))
                 <div 

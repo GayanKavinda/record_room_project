@@ -3,12 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Spatie\Permission\Models\Role; // Correct model import
+use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Support\Facades\Auth;
 
 class RoleController extends Controller
 {
+
     public function index()
     {
         // Fetch all roles from the database
@@ -52,7 +55,7 @@ class RoleController extends Controller
             'name' => [
                 'required',
                 'string',
-                'unique:roles,name,'.$role->id
+                'unique:roles,name,' . $role->id
             ]
         ]);
 
@@ -97,8 +100,6 @@ class RoleController extends Controller
 
     public function givePermissionToRole(Request $request, $roleId)
     {
-        // dd(session()->all());
-
         $request->validate([
             'permission' => 'required'
         ]);
@@ -107,6 +108,5 @@ class RoleController extends Controller
         $role->syncPermissions($request->permission);
 
         return redirect()->back()->with('success', 'Permissions added to role');
-
     }
 }
