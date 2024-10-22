@@ -90,32 +90,88 @@
                                 </table>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- Popup Modal for Message Content -->
-                    <div id="messageModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
-                        <div class="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
-                            <h2 id="modalTitle" class="text-xl font-bold mb-2"></h2>
-                            <p id="modalContent" class="text-gray-700 mb-4"></p>
-                            <div class="flex justify-between">
-                                <button class="bg-green-400 text-white px-4 py-1.5 rounded transition-transform duration-300 transform hover:scale-105">Accept</button>
-                                <button class="bg-red-400 text-white px-4 py-0 rounded transition-transform duration-300 transform hover:scale-105">Reject</button>
-                                <button onclick="closeMessage()" class="bg-gray-300 text-gray-800 px-4 py-2 rounded transition-transform duration-300 transform hover:scale-105">Cancel</button>
+                        <!-- Create Admin Account Card -->
+                        <div class="bg-orange-100 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
+                            <h2 class="text-xl font-semibold mb-4">Create Admin Account</h2>
+                            <button onclick="showAdminForm()" class="w-full bg-orange-600 text-white px-4 py-2 rounded hover:bg-orange-700 transition-transform duration-300 transform hover:scale-105">Create Admin Account</button>
+                        </div>
+
+                        <!-- Popup Modal for Message Content -->
+                        <div id="messageModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
+                            <div class="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
+                                <h2 id="modalTitle" class="text-xl font-bold mb-2"></h2>
+                                <p id="modalContent" class="text-gray-700 mb-4"></p>
+                                <div class="flex justify-between">
+                                    <button class="bg-green-400 text-white px-4 py-1.5 rounded transition-transform duration-300 transform hover:scale-105">Accept</button>
+                                    <button class="bg-red-400 text-white px-4 py-0 rounded transition-transform duration-300 transform hover:scale-105">Reject</button>
+                                    <button onclick="closeMessage()" class="bg-gray-300 text-gray-800 px-4 py-2 rounded transition-transform duration-300 transform hover:scale-105">Cancel</button>
+                                </div>
                             </div>
                         </div>
+
+                        <!-- Popup Modal for Admin Account Creation -->
+                        <div id="adminModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
+                            <div class="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
+                                <h2 class="text-xl font-bold mb-2">Create Admin Account</h2>
+                                <form id="adminForm">
+                                    <div class="mb-4">
+                                        <label for="admin_name" class="block text-sm font-medium text-gray-700">Admin Name</label>
+                                        <input type="text" id="admin_name" name="admin_name" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                                        <input type="password" id="password" name="password" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                                        <input type="email" id="email" name="email" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label for="user_type_id" class="block text-sm font-medium text-gray-700">User Type ID</label>
+                                        <input type="text" id="user_type_id" name="user_type_id" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label for="employee_id" class="block text-sm font-medium text-gray-700">Employee ID</label>
+                                        <input type="text" id="employee_id" name="employee_id" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label for="department_id" class="block text-sm font-medium text-gray-700">Department ID</label>
+                                        <input type="text" id="department_id" name="department_id" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <button type="button" onclick="clearForm()" class="bg-gray-300 text-gray-800 px-4 py-2 rounded transition-transform duration-300 transform hover:scale-105">Clear</button>
+                                        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded transition-transform duration-300 transform hover:scale-105">Submit</button>
+                                        <button onclick="closeAdminForm()" class="bg-red-600 text-white px-4 py-2 rounded transition-transform duration-300 transform hover:scale-105">Cancel</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <script>
+                            function showMessage(title, content) {
+                                document.getElementById('modalTitle').innerText = title;
+                                document.getElementById('modalContent').innerText = content;
+                                document.getElementById('messageModal').classList.remove('hidden');
+                            }
+
+                            function closeMessage() {
+                                document.getElementById('messageModal').classList.add('hidden');
+                            }
+
+                            function showAdminForm() {
+                                document.getElementById('adminModal').classList.remove('hidden');
+                            }
+
+                            function closeAdminForm() {
+                                document.getElementById('adminModal').classList.add('hidden');
+                            }
+
+                            function clearForm() {
+                                document.getElementById('adminForm').reset();
+                            }
+                        </script>
                     </div>
-
-                    <script>
-                        function showMessage(title, content) {
-                            document.getElementById('modalTitle').innerText = title;
-                            document.getElementById('modalContent').innerText = content;
-                            document.getElementById('messageModal').classList.remove('hidden');
-                        }
-
-                        function closeMessage() {
-                            document.getElementById('messageModal').classList.add('hidden');
-                        }
-                    </script>
                 </div>
             </div>
         </div>
