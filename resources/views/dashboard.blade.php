@@ -26,9 +26,9 @@
                                 <li><a href="{{ route('files.create') }}" class="text-blue-600 hover:underline">Add New File</a></li>
                                 <li><a href="{{ route('departments.index') }}" class="text-blue-600 hover:underline">Manage Departments</a></li>
                                 <div class="flex space-x-2 mt-2">
-                                    <a href="{{ route('roles.index') }}" class="bg-gray-200 text-gray-700 px-3 py-1 rounded hover:bg-gray-300">Roles</a>
-                                    <a href="{{ route('permissions.index') }}" class="bg-gray-200 text-gray-700 px-3 py-1 rounded hover:bg-gray-300">Permissions</a>
-                                    <a href="{{ route('users.index') }}" class="bg-gray-200 text-gray-700 px-3 py-1 rounded hover:bg-gray-300">Users</a>
+                                    <a href="{{ route('roles.index') }}" class="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400 transition duration-200">Roles</a>
+                                    <a href="{{ route('permissions.index') }}" class="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400 transition duration-200">Permissions</a>
+                                    <a href="{{ route('users.index') }}" class="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400 transition duration-200">Users</a>
                                 </div>
                             </ul>
                         </div>
