@@ -97,7 +97,11 @@
                         <div class="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
                             <h2 id="modalTitle" class="text-xl font-bold mb-2"></h2>
                             <p id="modalContent" class="text-gray-700 mb-4"></p>
-                            <button onclick="closeMessage()" class="bg-blue-600 text-white px-4 py-2 rounded transition-transform duration-300 transform hover:scale-105">Close</button>
+                            <div class="flex justify-between">
+                                <button class="bg-green-400 text-white px-4 py-1.5 rounded transition-transform duration-300 transform hover:scale-105">Accept</button>
+                                <button class="bg-red-400 text-white px-4 py-0 rounded transition-transform duration-300 transform hover:scale-105">Reject</button>
+                                <button onclick="closeMessage()" class="bg-gray-300 text-gray-800 px-4 py-2 rounded transition-transform duration-300 transform hover:scale-105">Cancel</button>
+                            </div>
                         </div>
                     </div>
 
