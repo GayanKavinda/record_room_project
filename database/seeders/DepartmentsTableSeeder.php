@@ -16,10 +16,18 @@ class DepartmentsTableSeeder extends Seeder
     {
         // Sample departments to insert
         $departments = [
-            ['department_name' => 'HR', 'department_no' => 1],
-            ['department_name' => 'IT', 'department_no' => 2],
-            ['department_name' => 'Finance', 'department_no' => 3],
-            ['department_name' => 'Sales', 'department_no' => 4],
+            ['department_name' => 'Admin', 'department_no' => 1],
+            ['department_name' => 'Planning', 'department_no' => 2],
+            ['department_name' => 'Development', 'department_no' => 3],
+            ['department_name' => 'Accounts', 'department_no' => 4],
+            ['department_name' => 'Engineering', 'department_no' => 5],
+            ['department_name' => 'Divisional Administration', 'department_no' => 6],
+            ['department_name' => 'RAR (Regional Administration Reforms)', 'department_no' => 7],
+            ['department_name' => 'District Admin', 'department_no' => 8],
+            ['department_name' => 'Gramaniladari Division', 'department_no' => 9],
+            ['department_name' => 'Divisional Administration', 'department_no' => 10],
+            ['department_name' => 'Investigation', 'department_no' => 11],
+            ['department_name' => 'Internal Audit', 'department_no' => 12],
             // Add more departments as needed
         ];
 
