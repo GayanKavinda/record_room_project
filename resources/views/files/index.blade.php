@@ -5,10 +5,12 @@
             <h1 class="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Files</h1>
             
             <!-- Create New File Button -->
+            @if(Auth::user()->hasRole('super-admin') || Auth::user()->hasRole('admin'))
             <a href="{{ route('files.create') }}" 
                class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4 inline-block">
                 Create New File
             </a>
+            @endif
 
             @if(session('success'))
                 <div 

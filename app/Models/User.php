@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
@@ -51,5 +52,9 @@ class User extends Authenticatable
             'date' => 'date', // Cast the 'date' field to a date type
             'password' => 'hashed',
         ];
+    }
+    public function department()
+    {
+        return $this->belongsTo(Department::class, 'department_name', 'department_name'); // Adjust the relationship as needed
     }
 }

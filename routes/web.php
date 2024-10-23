@@ -25,7 +25,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::resource('departments', DepartmentController::class);
-    Route::resource('files', FileController::class);
+    Route::resource('files', FileController::class)->middleware(['role:super-admin|admin|primary-user']);
 });
 
 Route::group(['middleware' => ['role:super-admin|admin']], function () {

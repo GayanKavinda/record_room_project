@@ -9,8 +9,9 @@ class Department extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'department_name',
-        'department_no',
-    ];
+    // Specify the table name if it's not the plural of the model name
+    protected $table = 'departments'; // Ensure this is correct
+
+    // Specify the fillable attributes if using mass assignment
+    protected $fillable = ['department_name']; // Use 'department_name' as your column name
 }

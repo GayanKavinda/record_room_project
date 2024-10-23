@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Spatie\Permission\Models\Permission; // Import the Permission model
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Auth;
 class PermissionController extends Controller
 {
     public function index()

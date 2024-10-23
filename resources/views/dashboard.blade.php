@@ -18,10 +18,12 @@
                     All Departments
                 </a>
 
+                @can('view files')
                 <a href="{{ route('files.index') }}" 
                 class="bg-green-600 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded mb-4 inline-block">
                     Files
                 </a>
+                @endcan
 
                 @include('role-permission.nav-links')
                 </div>
