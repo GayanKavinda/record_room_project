@@ -1,58 +1,35 @@
 <x-app-layout>
-    <div class="max-w-7xl mx-auto py-6 px-4">
-    @include('role-permission.nav-links')
-    <br>
+    <div class="container py-6">
+        @include('role-permission.nav-links')
+        <br>
         <!-- Main Card for Permissions -->
-        <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
-            <h1 class="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Permissions</h1>
+        <div class="bg-white shadow-md rounded-lg p-6">
+            <h1 class="text-xl font-semibold mb-4">Permissions</h1>
             
             <!-- Create New Permission Button -->
             <a href="{{ route('permissions.create') }}" 
-               class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4 inline-block">
+               class="btn btn-primary mb-4">
                 Create Permission
             </a>
-
-            @if(session('success'))
-                <div 
-                    x-data="{ show: true }"
-                    x-init="setTimeout(() => show = false, 3000)"
-                    x-show="show"
-                    x-transition:enter="transition ease-out duration-500"
-                    x-transition:enter-start="opacity-0 transform scale-90"
-                    x-transition:enter-end="opacity-100 transform scale-100"
-                    x-transition:leave="transition ease-in duration-500"
-                    x-transition:leave-start="opacity-100 transform scale-100"
-                    x-transition:leave-end="opacity-0 transform scale-90"
-                    class="bg-green-100 border-l-4 border-green-500 text-green-700 p-2 mb-4 max-w-md mx-auto rounded"
-                    role="alert"
-                >
-                    <p class="font-bold">Success</p>
-                    <p>{{ session('success') }}</p>
-                </div>
-            @endif
-
+            
             <!-- Table Container -->
             <div class="overflow-x-auto">
-                <table class="min-w-full border-collapse border border-gray-300">
-                    <thead class="bg-gray-200 dark:bg-gray-700">
+                <table class="table">
+                    <thead class="table-light">
                         <tr>
-                            <th class="border px-3 py-2 text-left text-gray-900 dark:text-gray-100 text-sm">ID</th>
-                            <th class="border px-3 py-2 text-left text-gray-900 dark:text-gray-100 text-sm">Name</th>
-                            <th class="border px-3 py-2 text-left text-gray-900 dark:text-gray-100 text-sm">Action</th>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
-                    <tbody class="bg-white dark:bg-gray-800">
+                    <tbody>
                         @foreach ($permissions as $permission)
-                            <tr class="bg-gray-100 dark:bg-gray-700">
-                                <td class="border px-3 py-2 text-gray-900 dark:text-gray-200 text-sm">{{ $permission->id }}</td>
-                                <td class="border px-3 py-2 text-gray-900 dark:text-gray-200 text-sm">{{ $permission->name }}</td>
-                                <td class="border px-3 py-2 text-gray-900 dark:text-gray-200 text-sm">
-                                    
+                            <tr>
+                                <td>{{ $permission->id }}</td>
+                                <td>{{ $permission->name }}</td>
+                                <td>
                                     <a href="{{ url('permissions/'.$permission->id.'/edit') }}" 
-                                    class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Edit</a>
-
-                                    <a href="{{ url('permissions/'.$permission->id.'/delete') }}" 
-                                    class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Delete</a>
+                                       class="btn btn-info">Edit</a>
                                 </td>
                             </tr>
                         @endforeach

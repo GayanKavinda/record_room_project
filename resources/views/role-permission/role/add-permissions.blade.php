@@ -1,11 +1,11 @@
 <x-app-layout>
-    <div class="max-w-7xl mx-auto py-6 px-4">
+    <div class="container py-6">
         <!-- Main Card for Permissions -->
-        <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
-            <div class="flex justify-between items-center mb-4">
-                <h1 class="text-xl font-semibold text-gray-900 dark:text-white">Role : {{ $role->name}}</h1>
+        <div class="bg-white shadow-md rounded-lg p-6">
+            <div class="d-flex justify-content-between mb-4">
+                <h1 class="text-xl font-semibold">Role : {{ $role->name}}</h1>
                 <a href="{{ url('roles') }}" 
-                   class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                   class="btn btn-primary">
                     Back
                 </a>
             </div>
