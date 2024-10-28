@@ -16,6 +16,13 @@
             <x-input-error :messages="$errors->get('name')" class="mt-2" />
         </div>
 
+        <!-- NIC (National Identity Card No) -->
+        <div class="mt-4">
+            <x-input-label for="nic" :value="__('National Identity Card No')" />
+            <x-text-input id="nic" class="block mt-1 w-full" type="text" name="nic" :value="old('nic')" required />
+            <x-input-error :messages="$errors->get('nic')" class="mt-2" />
+        </div>
+
         <!-- Department Name -->
         <div class="mt-4">
             <x-input-label for="department_name" :value="__('Department Name')" />

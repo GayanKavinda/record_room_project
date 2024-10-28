@@ -14,5 +14,11 @@ class File extends Model
         'responsible_officer',
         'open_date',
         'close_date',
+        'department_no',  // Add this line to make department_no fillable
     ];
+
+    public function department()
+    {
+        return $this->belongsTo(Department::class, 'department_no', 'department_no');
+    }
 }

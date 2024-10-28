@@ -163,6 +163,7 @@
                                 document.getElementById('adminModal').classList.remove('hidden');
                             }
 
+
                             function closeAdminForm() {
                                 document.getElementById('adminModal').classList.add('hidden');
                             }
