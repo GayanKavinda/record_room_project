@@ -51,7 +51,7 @@
                                 <td class="border px-3 py-2 text-gray-900 dark:text-gray-200 text-sm">
                                     
                                     <a href="{{ url('roles/'.$role->id.'/give-permissions') }}" 
-                                    class="bg-orange-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded">Add / Edit Role Permission</a>
+                                    class="bg-teal-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded">Add / Edit Role Permission</a>
 
                                     <a href="{{ url('roles/'.$role->id.'/edit') }}" 
                                     class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Edit</a>
