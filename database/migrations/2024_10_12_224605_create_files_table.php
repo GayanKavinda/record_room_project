@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('responsible_officer');
             $table->date('open_date');
             $table->date('close_date')->nullable();
+            $table->bigInteger('department_no')->unsigned(); // or wherever appropriate
             $table->timestamps();
         });
     }
@@ -27,5 +28,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('files');
+        Schema::table('files', function (Blueprint $table) {
+            $table->dropColumn('department_no');
+        });
     }
 };

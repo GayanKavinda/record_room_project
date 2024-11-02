@@ -21,6 +21,10 @@ return new class extends Migration
                 $table->string('department_name')->after('employee_id');
             }
 
+            if (!Schema::hasColumn('users', 'nic')) {
+                $table->string('nic')->unique()->after('name'); // Add NIC column
+            }
+
             if (!Schema::hasColumn('users', 'join_or_transfer')) {
                 $table->string('join_or_transfer')->after('department_name'); // Change jt_date to join_or_transfer
             }
