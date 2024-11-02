@@ -177,4 +177,9 @@
             </div>
         </div>
     </div>
+
+    <?php
+date_default_timezone_set('Asia/Colombo');
+echo date("Y-m-d H:i:s");
+?>
 </x-app-layout>

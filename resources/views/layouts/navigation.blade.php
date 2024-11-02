@@ -10,7 +10,7 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="text-gray-300 hover:text-white font-semibold transition ease-in-out duration-150">
+                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="text-yellow-400 hover:text-white font-semibold transition ease-in-out duration-150">
                         {{ __('Home') }}
                     </x-nav-link>
                 </div>
