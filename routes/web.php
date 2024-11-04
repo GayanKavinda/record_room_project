@@ -26,7 +26,7 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('departments', DepartmentController::class);
     Route::resource('files', FileController::class)->middleware(['role:super-admin|admin|primary-user']);
-    Route::put('/files/{id}', 'FileController@update')->name('files.update');
+    Route::put('/files/{id}', [FileController::class, 'update'])->name('files.update');
 
 });
 
