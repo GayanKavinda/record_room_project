@@ -78,4 +78,6 @@ Route::get('/check-super-admin-permissions', function() {
     return response()->json($permissions);
 });
 
+Route::post('/files/send-to-record-room', [FileController::class, 'sendToRecordRoom'])->name('files.send-to-record-room');
+
 require __DIR__.'/auth.php';

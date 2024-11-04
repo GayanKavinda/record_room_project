@@ -58,7 +58,7 @@
                     </thead>
                     <tbody class="bg-white dark:bg-gray-800">
                         @foreach ($files as $file)
-                            <tr class="bg-gray-100 dark:bg-gray-700">
+                            <tr data-file-id="{{ $file->id }}" class="bg-white dark:bg-gray-800">
                                 <td class="border px-3 py-2 text-gray-900 dark:text-gray-200 text-sm">{{ $file->file_no }}</td>
                                 <td class="border px-3 py-2 text-gray-900 dark:text-gray-200 text-sm">{{ $file->responsible_officer }}</td>
                                 <td class="border px-3 py-2 text-gray-900 dark:text-gray-200 text-sm">{{ $file->open_date }}</td>
@@ -166,7 +166,6 @@
                     <select id="rack_letter" name="rack_letter" required
                             class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white dark:border-gray-600">
                         <option value="">Select Rack Letter</option>
-                        <!-- Will be populated via JavaScript -->
                     </select>
                 </div>
 
@@ -247,6 +246,10 @@
         });
 
         function sendToRecordRoom(fileId) {
+            // Store fileId in a data attribute of the modal
+            const modal = document.getElementById('recordRoomModal');
+            modal.setAttribute('data-file-id', fileId);
+
             // Populate rack letters dropdown
             const rackLetterSelect = document.getElementById('rack_letter');
             rackLetterSelect.innerHTML = '<option value="">Select Rack Letter</option>';
@@ -256,10 +259,15 @@
             }
 
             // Show the modal
-            document.getElementById('recordRoomModal').classList.remove('hidden');
+            modal.classList.remove('hidden');
+            
+            // Remove any existing event listeners
+            const form = document.getElementById('recordRoomForm');
+            const newForm = form.cloneNode(true);
+            form.parentNode.replaceChild(newForm, form);
             
             // Handle rack letter change
-            rackLetterSelect.addEventListener('change', function() {
+            document.getElementById('rack_letter').addEventListener('change', function() {
                 const subRackSelect = document.getElementById('sub_rack');
                 const selectedLetter = this.value;
                 
@@ -282,18 +290,60 @@
                     cellNumber: document.getElementById('cell_number').value
                 };
 
-                // Here you would typically send this data to your backend
-                console.log('Sending to record room:', formData);
-                
-                // Close the modal
-                closeRecordRoomModal();
+                fetch('/files/send-to-record-room', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify(formData)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        return response.json().then(err => Promise.reject(err));
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        // Find the current row using the stored fileId
+                        const currentRow = document.querySelector(`tr[data-file-id="${fileId}"]`);
+                        if (currentRow) {
+                            // Update buttons
+                            const buttons = currentRow.querySelectorAll('button, a');
+                            buttons.forEach(button => {
+                                button.classList.add('opacity-50', 'cursor-not-allowed');
+                                if (button.tagName === 'BUTTON') {
+                                    button.disabled = true;
+                                }
+                            });
+
+                            // Remove the send to record room button
+                            const sendButton = currentRow.querySelector('button[onclick*="sendToRecordRoom"]');
+                            if (sendButton) {
+                                sendButton.remove();
+                            }
+                        }
+
+                        // Show success message
+                        alert('File successfully sent to record room');
+                        closeRecordRoomModal();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred while sending the file to record room: ' + (error.message || 'Unknown error'));
+                });
             });
         }
 
         function closeRecordRoomModal() {
-            document.getElementById('recordRoomModal').classList.add('hidden');
+            const modal = document.getElementById('recordRoomModal');
+            modal.classList.add('hidden');
             document.getElementById('recordRoomForm').reset();
-            document.getElementById('sub_rack').disabled = false;
+            const subRackSelect = document.getElementById('sub_rack');
+            subRackSelect.disabled = false;
+            modal.removeAttribute('data-file-id');
         }
     </script>
 </x-app-layout>
