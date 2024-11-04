@@ -34,7 +34,7 @@ class FileController extends Controller
             $files = File::all();
         }
 
-        return view('files.index', compact('files'));
+        return request()->ajax() ? response()->json($files) : view('files.index', compact('files'));
     }
 
 
@@ -111,31 +111,49 @@ class FileController extends Controller
     }
 
     // Update the specified file in storage
-    public function update(Request $request, File $file)
-{
-    $request->validate([
-        'file_no' => [
-            'required',
-            'string',
-            'regex:/^HA\/\d{2}\/\d{2}\/\d{2}\/\d{2}$|^[0-9]+$/', // Ensure the regex pattern is correct
-            'unique:files,file_no,' . $file->id,
-        ],
-        'responsible_officer' => 'required|string|max:255',
-        'open_date' => 'required|date',
-        'close_date' => 'nullable|date|after_or_equal:open_date',
-    ]);
+    public function update(Request $request, $id)
+    {
+        \Log::info('Update Request Data: ', $request->all());
 
-    // Update the file data
-    $file->update($request->all());
+        try {
+            $request->validate([
+                'responsible_officer' => 'required|string|max:255',
+                'given_date' => 'required|date',
+                'page_capacity' => 'required|integer',
+                'note' => 'nullable|string',
+                'expire_date' => 'nullable|date',
+            ]);
 
-    return redirect()->route('files.index')->with('success', 'File updated successfully.');
-}
+            $file = File::findOrFail($id);
+            $file->responsible_officer = $request->responsible_officer;
+            $file->given_date = $request->given_date;
+            $file->page_capacity = $request->page_capacity;
+            $file->note = $request->note;
+            $file->expire_date = $request->expire_date;
+            $file->save();
 
+            return response()->json(['success' => true]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json(['success' => false, 'message' => $e->validator->errors()->first()], 422);
+        } catch (\Exception $e) {
+            \Log::error('Update Failed: ' . $e->getMessage());
+            return response()->json(['success' => false, 'message' => 'An error occurred while updating the file.'], 500);
+        }
+    }
 
     // Remove the specified file from storage
     public function destroy(File $file)
     {
         $file->delete();
         return redirect()->route('files.index')->with('success', 'File deleted successfully.');
+    }
+
+    // Example method to handle Expire Date action
+    public function expire(File $file)
+    {
+        $file->expire_date = now()->toDateString();
+        $file->save();
+
+        return response()->json(['success' => true, 'message' => 'File expired successfully.']);
     }
 }
