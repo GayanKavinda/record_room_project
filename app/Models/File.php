@@ -15,6 +15,10 @@ class File extends Model
         'open_date',
         'close_date',
         'department_no',  // Add this line to make department_no fillable
+        'given_date',      // New field
+        'page_capacity',   // New field
+        'note',            // New field
+        'expire_date',     // New field
     ];
 
     public function department()

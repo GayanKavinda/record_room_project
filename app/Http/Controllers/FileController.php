@@ -34,7 +34,7 @@ class FileController extends Controller
             $files = File::all();
         }
 
-        return view('files.index', compact('files'));
+        return request()->ajax() ? response()->json($files) : view('files.index', compact('files'));
     }
 
 
@@ -111,25 +111,33 @@ class FileController extends Controller
     }
 
     // Update the specified file in storage
-    public function update(Request $request, File $file)
+    public function update(Request $request, $id)
 {
-    $request->validate([
-        'file_no' => [
-            'required',
-            'string',
-            'regex:/^HA\/\d{2}\/\d{2}\/\d{2}\/\d{2}$|^[0-9]+$/', // Ensure the regex pattern is correct
-            'unique:files,file_no,' . $file->id,
-        ],
+    // Validate request data
+    $validatedData = $request->validate([
         'responsible_officer' => 'required|string|max:255',
-        'open_date' => 'required|date',
-        'close_date' => 'nullable|date|after_or_equal:open_date',
+        'given_date' => 'nullable|date',
+        'page_capacity' => 'nullable|integer',
+        'note' => 'nullable|string',
     ]);
 
-    // Update the file data
-    $file->update($request->all());
+    // Find the file and update it
+    $file = File::find($id);
+    if (!$file) {
+        return response()->json(['success' => false, 'message' => 'File not found.'], 404);
+    }
 
-    return redirect()->route('files.index')->with('success', 'File updated successfully.');
+    // Update the file data with validated input
+    $file->update($validatedData);
+
+    // Disable editing and enable expire date option
+    $file->is_editable = false; // Disable editing
+    $file->is_expirable = true; // Enable expiration action
+    $file->save();
+
+    return response()->json(['success' => true, 'message' => 'File updated successfully.']);
 }
+
 
 
     // Remove the specified file from storage
@@ -137,5 +145,14 @@ class FileController extends Controller
     {
         $file->delete();
         return redirect()->route('files.index')->with('success', 'File deleted successfully.');
+    }
+
+    // Example method to handle Expire Date action
+    public function expire(File $file)
+    {
+        $file->expire_date = now()->toDateString();
+        $file->save();
+
+        return response()->json(['success' => true, 'message' => 'File expired successfully.']);
     }
 }
