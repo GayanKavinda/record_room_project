@@ -154,6 +154,54 @@
         </div>
     </div>
 
+    <!-- Send to Record Room Modal -->
+    <div id="recordRoomModal" class="fixed inset-0 z-50 flex items-center justify-center hidden bg-gray-900 bg-opacity-50" role="dialog" aria-modal="true">
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-md">
+            <h2 class="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Send to Record Room</h2>
+            
+            <form id="recordRoomForm" class="space-y-4">
+                <!-- Rack Letter -->
+                <div>
+                    <label for="rack_letter" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Rack Letter</label>
+                    <select id="rack_letter" name="rack_letter" required
+                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white dark:border-gray-600">
+                        <option value="">Select Rack Letter</option>
+                        <!-- Will be populated via JavaScript -->
+                    </select>
+                </div>
+
+                <!-- Sub Rack -->
+                <div>
+                    <label for="sub_rack" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Sub Rack</label>
+                    <select id="sub_rack" name="sub_rack" required
+                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white dark:border-gray-600">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                    </select>
+                </div>
+
+                <!-- Cell Number -->
+                <div>
+                    <label for="cell_number" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Cell Number</label>
+                    <input type="number" id="cell_number" name="cell_number" required min="1"
+                           class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white dark:border-gray-600">
+                </div>
+
+                <!-- Buttons -->
+                <div class="flex justify-end space-x-2">
+                    <button type="button" onclick="closeRecordRoomModal()" 
+                            class="bg-gray-400 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded">
+                        Cancel
+                    </button>
+                    <button type="submit" 
+                            class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded">
+                        Submit
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script>
         function openModal(id, fileNo, responsibleOfficer, givenDate, pageCapacity, note, expireDate) {
             document.getElementById('modal_file_no').value = fileNo;
@@ -199,8 +247,53 @@
         });
 
         function sendToRecordRoom(fileId) {
-            // Implement send to record room functionality here
-            console.log('Sending file with ID:', fileId);
+            // Populate rack letters dropdown
+            const rackLetterSelect = document.getElementById('rack_letter');
+            rackLetterSelect.innerHTML = '<option value="">Select Rack Letter</option>';
+            for (let i = 65; i <= 90; i++) {
+                const letter = String.fromCharCode(i);
+                rackLetterSelect.innerHTML += `<option value="${letter}">${letter}</option>`;
+            }
+
+            // Show the modal
+            document.getElementById('recordRoomModal').classList.remove('hidden');
+            
+            // Handle rack letter change
+            rackLetterSelect.addEventListener('change', function() {
+                const subRackSelect = document.getElementById('sub_rack');
+                const selectedLetter = this.value;
+                
+                if (selectedLetter === 'A' || selectedLetter === 'Z') {
+                    subRackSelect.value = '1';
+                    subRackSelect.disabled = true;
+                } else {
+                    subRackSelect.disabled = false;
+                }
+            });
+
+            // Handle form submission
+            document.getElementById('recordRoomForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const formData = {
+                    fileId: fileId,
+                    rackLetter: document.getElementById('rack_letter').value,
+                    subRack: document.getElementById('sub_rack').value,
+                    cellNumber: document.getElementById('cell_number').value
+                };
+
+                // Here you would typically send this data to your backend
+                console.log('Sending to record room:', formData);
+                
+                // Close the modal
+                closeRecordRoomModal();
+            });
+        }
+
+        function closeRecordRoomModal() {
+            document.getElementById('recordRoomModal').classList.add('hidden');
+            document.getElementById('recordRoomForm').reset();
+            document.getElementById('sub_rack').disabled = false;
         }
     </script>
 </x-app-layout>
