@@ -8,6 +8,7 @@ use App\Rules\FileNoFormat;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Department; // Import your Department model
 use Illuminate\Validation\ValidationException;
+use App\Models\RecordRoom;
 
 
 
@@ -155,5 +156,30 @@ class FileController extends Controller
         $file->save();
 
         return response()->json(['success' => true, 'message' => 'File expired successfully.']);
+    }
+
+    public function sendToRecordRoom(Request $request)
+    {
+        $request->validate([
+            'fileId' => 'required|exists:files,id',
+            'rackLetter' => 'required|string|size:1',
+            'subRack' => 'required|in:1,2',
+            'cellNumber' => 'required|integer|min:1'
+        ]);
+
+        $file = File::findOrFail($request->fileId);
+        
+        // Create record room entry
+        RecordRoom::create([
+            'file_id' => $request->fileId,
+            'rack_letter' => $request->rackLetter,
+            'sub_rack' => $request->subRack,
+            'cell_number' => $request->cellNumber
+        ]);
+
+        // Update file status to indicate it's in record room
+        $file->update(['in_record_room' => true]);
+
+        return response()->json(['success' => true]);
     }
 }

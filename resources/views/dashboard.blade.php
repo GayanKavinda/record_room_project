@@ -114,35 +114,48 @@
                         <div id="adminModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
                             <div class="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
                                 <h2 class="text-xl font-bold mb-2">Create Admin Account</h2>
-                                <form id="adminForm">
+                                <form id="adminForm" action="{{ route('users.store') }}" method="POST">
+                                    @csrf
                                     <div class="mb-4">
-                                        <label for="admin_name" class="block text-sm font-medium text-gray-700">Admin Name</label>
-                                        <input type="text" id="admin_name" name="admin_name" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
+                                        <label for="employee_id" class="block text-sm font-medium text-gray-700">Employee ID</label>
+                                        <input type="text" id="employee_id" name="employee_id" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
                                     </div>
                                     <div class="mb-4">
-                                        <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-                                        <input type="password" id="password" name="password" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
+                                        <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+                                        <input type="text" id="name" name="name" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label for="department_name" class="block text-sm font-medium text-gray-700">Department</label>
+                                        <select name="department_name" id="department_name" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
+                                            <option value="">Select Department</option>
+                                            @foreach($departments as $department)
+                                                <option value="{{ $department->department_name }}">{{ $department->department_name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label for="join_or_transfer" class="block text-sm font-medium text-gray-700">Join or Transfer</label>
+                                        <select id="join_or_transfer" name="join_or_transfer" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
+                                            <option value="join">Join</option>
+                                            <option value="transfer">Transfer</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label for="date" class="block text-sm font-medium text-gray-700">Date</label>
+                                        <input type="date" id="date" name="date" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
                                     </div>
                                     <div class="mb-4">
                                         <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
                                         <input type="email" id="email" name="email" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
                                     </div>
                                     <div class="mb-4">
-                                        <label for="user_type_id" class="block text-sm font-medium text-gray-700">User Type ID</label>
-                                        <input type="text" id="user_type_id" name="user_type_id" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
-                                    </div>
-                                    <div class="mb-4">
-                                        <label for="employee_id" class="block text-sm font-medium text-gray-700">Employee ID</label>
-                                        <input type="text" id="employee_id" name="employee_id" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
-                                    </div>
-                                    <div class="mb-4">
-                                        <label for="department_id" class="block text-sm font-medium text-gray-700">Department ID</label>
-                                        <input type="text" id="department_id" name="department_id" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
+                                        <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                                        <input type="password" id="password" name="password" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
                                     </div>
                                     <div class="flex justify-between">
                                         <button type="button" onclick="clearForm()" class="bg-gray-300 text-gray-800 px-4 py-2 rounded transition-transform duration-300 transform hover:scale-105">Clear</button>
                                         <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded transition-transform duration-300 transform hover:scale-105">Submit</button>
-                                        <button onclick="closeAdminForm()" class="bg-red-600 text-white px-4 py-2 rounded transition-transform duration-300 transform hover:scale-105">Cancel</button>
+                                        <button type="button" onclick="closeAdminForm()" class="bg-red-600 text-white px-4 py-2 rounded transition-transform duration-300 transform hover:scale-105">Cancel</button>
                                     </div>
                                 </form>
                             </div>
