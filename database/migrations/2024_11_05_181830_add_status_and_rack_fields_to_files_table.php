@@ -12,7 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('files', function (Blueprint $table) {
-            $table->boolean('in_record_room')->default(false);
+            $table->string('status')->default('Active')->after('is_expirable');
+            $table->string('rack_letter')->nullable()->after('status');
+            $table->integer('sub_rack')->nullable()->after('rack_letter');
+            $table->integer('cell_number')->nullable()->after('sub_rack');
         });
     }
 
@@ -22,7 +25,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('files', function (Blueprint $table) {
-            $table->dropColumn('in_record_room');
+            $table->dropColumn(['status', 'rack_letter', 'sub_rack', 'cell_number']);
         });
     }
 };

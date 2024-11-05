@@ -23,6 +23,7 @@ export default {
                 indigo: {
                     600: '#5D4FD8', // This is an approximation of the color in the image
                 },
+                'disabled-gray': '#b0b0b0', // Custom color for disabled buttons
             },
         },
     },

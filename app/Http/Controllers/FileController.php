@@ -158,28 +158,23 @@ class FileController extends Controller
         return response()->json(['success' => true, 'message' => 'File expired successfully.']);
     }
 
-    public function sendToRecordRoom(Request $request)
+    public function sendToRecordRoom(File $file)
     {
-        $request->validate([
-            'fileId' => 'required|exists:files,id',
-            'rackLetter' => 'required|string|size:1',
-            'subRack' => 'required|in:1,2',
-            'cellNumber' => 'required|integer|min:1'
+        // Update status to Pending and save it
+        $file->update([
+            'status' => 'Pending', // Change status to Pending
         ]);
 
-        $file = File::findOrFail($request->fileId);
-        
-        // Create record room entry
-        RecordRoom::create([
-            'file_id' => $request->fileId,
-            'rack_letter' => $request->rackLetter,
-            'sub_rack' => $request->subRack,
-            'cell_number' => $request->cellNumber
-        ]);
-
-        // Update file status to indicate it's in record room
-        $file->update(['in_record_room' => true]);
-
-        return response()->json(['success' => true]);
+        return response()->json(['success' => true, 'message' => 'File sent to record room successfully.']);
     }
+
+    public function updateStatus(Request $request)
+    {
+        $file = File::find($request->id);
+        $file->status = 'Pending';
+        $file->save();
+
+        return response()->json(['status' => 'success', 'message' => 'Status updated successfully']);
+    }
+
 }

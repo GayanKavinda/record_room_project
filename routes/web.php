@@ -28,7 +28,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('departments', DepartmentController::class);
     Route::resource('files', FileController::class)->middleware(['role:super-admin|admin|primary-user']);
     Route::put('/files/{id}', [FileController::class, 'update'])->name('files.update');
-
+    Route::post('/files/{file}/send-to-record-room', [FileController::class, 'sendToRecordRoom'])->name('files.sendToRecordRoom');
+    Route::post('/files/update-status', [FileController::class, 'updateStatus'])->name('files.updateStatus');
 });
 
 Route::group(['middleware' => ['role:super-admin|admin']], function () {

@@ -19,16 +19,11 @@ class File extends Model
         'page_capacity',
         'note',
         'expire_date',
-        'in_record_room'
+        'status', // Add this to allow status updates
     ];
 
     public function department()
     {
         return $this->belongsTo(Department::class, 'department_no', 'department_no');
-    }
-
-    public function recordRoom()
-    {
-        return $this->hasOne(RecordRoom::class);
     }
 }
