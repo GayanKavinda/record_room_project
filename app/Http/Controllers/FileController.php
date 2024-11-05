@@ -160,26 +160,45 @@ class FileController extends Controller
 
     public function sendToRecordRoom(Request $request)
     {
-        $request->validate([
-            'fileId' => 'required|exists:files,id',
-            'rackLetter' => 'required|string|size:1',
-            'subRack' => 'required|in:1,2',
-            'cellNumber' => 'required|integer|min:1'
-        ]);
+        try {
+            // Validate the incoming request data
+            $request->validate([
+                'fileId' => 'required|exists:files,id',
+                'rackLetter' => 'required|string|size:1',
+                'subRack' => 'required|in:1,2',
+                'cellNumber' => 'required|integer|min:1'
+            ]);
 
-        $file = File::findOrFail($request->fileId);
-        
-        // Create record room entry
-        RecordRoom::create([
-            'file_id' => $request->fileId,
-            'rack_letter' => $request->rackLetter,
-            'sub_rack' => $request->subRack,
-            'cell_number' => $request->cellNumber
-        ]);
+            // Find the file by ID
+            $file = File::findOrFail($request->fileId);
+            
+            // Create a new record room entry
+            RecordRoom::create([
+                'file_no' => $file->file_no,
+                'rack_no' => $request->rackLetter . $request->subRack,
+                'cell_no' => $request->cellNumber
+            ]);
 
-        // Update file status to indicate it's in record room
-        $file->update(['in_record_room' => true]);
+            // Update the file status to indicate it's in the record room
+            $file->update(['in_record_room' => true]);
 
-        return response()->json(['success' => true]);
+            // Return a success response
+            return response()->json(['success' => true]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            // Return validation errors
+            return response()->json([
+                'success' => false,
+                'message' => $e->validator->errors()->first()
+            ], 422);
+        } catch (\Exception $e) {
+            // Log the error message
+            \Log::error('Error in sendToRecordRoom: ' . $e->getMessage());
+            
+            // Return a generic error message
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred while processing your request.'
+            ], 500);
+        }
     }
 }

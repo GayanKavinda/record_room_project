@@ -6,10 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class RecordRoom extends Model
 {
-    protected $fillable = ['file_id', 'rack_letter', 'sub_rack', 'cell_number'];
+    protected $table = 'record_room';
+
+    protected $fillable = ['file_no', 'rack_no', 'cell_no'];
 
     public function file()
     {
-        return $this->belongsTo(File::class);
+        return $this->belongsTo(File::class, 'file_no', 'file_no');
     }
 }

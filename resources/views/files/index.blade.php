@@ -53,6 +53,7 @@
                             <th class="border px-3 py-2 text-left text-gray-900 dark:text-gray-100 text-sm">Page Capacity</th>
                             <th class="border px-3 py-2 text-left text-gray-900 dark:text-gray-100 text-sm">Note</th>
                             <th class="border px-3 py-2 text-left text-gray-900 dark:text-gray-100 text-sm">Expire Date</th>
+                            <th class="border px-3 py-2 text-left text-gray-900 dark:text-gray-100 text-sm">Status</th>
                             <th class="border px-3 py-2 text-left text-gray-900 dark:text-gray-100 text-sm">Actions</th>
                         </tr>
                     </thead>
@@ -67,6 +68,21 @@
                                 <td class="border px-3 py-2 text-gray-900 dark:text-gray-200 text-sm">{{ $file->page_capacity }}</td>
                                 <td class="border px-3 py-2 text-gray-900 dark:text-gray-200 text-sm text-wrap">{{ $file->note }}</td>
                                 <td class="border px-3 py-2 text-gray-900 dark:text-gray-200 text-sm">{{ $file->expire_date }}</td>
+                                <td class="border px-3 py-2 text-sm">
+                                    @if(!$file->recordRoom)
+                                        <span class="bg-red-100 text-red-800 px-2 py-1 rounded-full text-xs font-semibold">
+                                            Not sent To Record Room
+                                        </span>
+                                    @elseif($file->recordRoom && !$file->recordRoom->cell_no)
+                                        <span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-xs font-semibold">
+                                            Pending
+                                        </span>
+                                    @else
+                                        <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-semibold">
+                                            Sent to Record Room
+                                        </span>
+                                    @endif
+                                </td>
                                 <td class="border px-3 py-2">
                                     <!-- Show Button -->
                                     <a href="{{ route('files.show', $file->id) }}" 
@@ -294,13 +310,24 @@
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                        'Accept': 'application/json'
                     },
                     body: JSON.stringify(formData)
                 })
                 .then(response => {
                     if (!response.ok) {
-                        return response.json().then(err => Promise.reject(err));
+                        return response.text().then(text => {
+                            try {
+                                // Try to parse as JSON
+                                const json = JSON.parse(text);
+                                throw new Error(json.message || 'An error occurred');
+                            } catch (e) {
+                                // If not JSON, it's probably an HTML error page
+                                console.error('Server Response:', text);
+                                throw new Error('Server error occurred. Please try again.');
+                            }
+                        });
                     }
                     return response.json();
                 })
@@ -309,6 +336,16 @@
                         // Find the current row using the stored fileId
                         const currentRow = document.querySelector(`tr[data-file-id="${fileId}"]`);
                         if (currentRow) {
+                            // Update the status cell
+                            const statusCell = currentRow.querySelector('td:nth-last-child(2)');
+                            if (statusCell) {
+                                statusCell.innerHTML = `
+                                    <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-semibold">
+                                        Sent to Record Room
+                                    </span>
+                                `;
+                            }
+
                             // Update buttons
                             const buttons = currentRow.querySelectorAll('button, a');
                             buttons.forEach(button => {
@@ -332,7 +369,7 @@
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    alert('An error occurred while sending the file to record room: ' + (error.message || 'Unknown error'));
+                    alert(error.message || 'An error occurred while sending the file to record room');
                 });
             });
         }

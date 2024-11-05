@@ -29,6 +29,6 @@ class File extends Model
 
     public function recordRoom()
     {
-        return $this->hasOne(RecordRoom::class);
+        return $this->hasOne(RecordRoom::class, 'file_no', 'file_no');
     }
 }
