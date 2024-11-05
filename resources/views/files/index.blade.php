@@ -80,6 +80,15 @@
                                         Edit
                                     </button>
 
+                                    <!-- Delete Button -->
+                                    <form action="{{ route('files.destroy', $file->id) }}" method="POST" class="inline-block">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="bg-red-500 hover:bg-red-600 text-white font-semibold py-1 px-2 rounded text-sm">
+                                            Delete
+                                        </button>
+                                    </form>
+
                                     <!-- Send to Record Room Button -->
                                     <button onclick="sendToRecordRoom({{ $file->id }})"
                                             class="bg-gray-500 hover:bg-gray-700 text-white font-semibold py-1 px-2 rounded text-sm">
