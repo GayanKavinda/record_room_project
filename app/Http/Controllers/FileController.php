@@ -8,12 +8,15 @@ use App\Rules\FileNoFormat;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Department; // Import your Department model
 use Illuminate\Validation\ValidationException;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use App\Models\RecordRoom;
 
 
 
 class FileController extends Controller
 {
+    use AuthorizesRequests; // Add this line
+
     public function index()
     {
         $user = Auth::user();
@@ -149,32 +152,59 @@ class FileController extends Controller
         return redirect()->route('files.index')->with('success', 'File deleted successfully.');
     }
 
-    // Example method to handle Expire Date action
-    public function expire(File $file)
+    /**
+     * Send the file to the record room by updating its status.
+     */
+    public function sendToRecordRoom(Request $request)
     {
-        $file->expire_date = now()->toDateString();
-        $file->save();
+        $file = File::findOrFail($request->file_id);
 
-        return response()->json(['success' => true, 'message' => 'File expired successfully.']);
-    }
-
-    public function sendToRecordRoom(File $file)
-    {
-        // Update status to Pending and save it
-        $file->update([
-            'status' => 'Pending', // Change status to Pending
-        ]);
-
-        return response()->json(['success' => true, 'message' => 'File sent to record room successfully.']);
-    }
-
-    public function updateStatus(Request $request)
-    {
-        $file = File::find($request->id);
+        // Update the status to Pending
         $file->status = 'Pending';
         $file->save();
 
-        return response()->json(['status' => 'success', 'message' => 'Status updated successfully']);
+        return response()->json(['success' => true, 'message' => 'File sent to record room.']);
     }
 
+    public function recordRoomIndex()
+    {
+        $this->authorize('accessRecordRoom');
+
+        $files = File::where('status', 'Pending')->get();
+        return view('record_room.index', compact('files'));
+    }
+
+    public function assignRackLocation(Request $request, $id)
+    {
+        $file = File::findOrFail($id);
+
+        $request->validate([
+            'rack_letter' => 'required|string|max:1',
+            'sub_rack' => 'required|integer',
+            'cell_number' => 'required|integer',
+        ]);
+
+        $file->rack_letter = $request->rack_letter;
+        $file->sub_rack = $request->sub_rack;
+        $file->cell_number = $request->cell_number;
+        $file->status = 'Rack Assigned';
+        $file->save();
+
+        return redirect()->route('record-room.index')->with('success', 'Rack location assigned successfully.');
+    }
+
+    public function storeRecordRoom($id)
+    {
+        $file = File::findOrFail($id);
+
+        // Check if the file status is Rack Assigned before storing it
+        if ($file->status === 'Rack Assigned') {
+            $file->status = 'Stored'; // Change status to 'Stored'
+            $file->save();
+
+            return redirect()->route('record-room.index')->with('success', 'File stored in the record room.');
+        }
+
+        return redirect()->route('record-room.index')->with('error', 'Cannot store file. It needs to be rack assigned first.');
+    }
 }

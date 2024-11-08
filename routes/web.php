@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 
 
 
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -28,8 +29,19 @@ Route::middleware('auth')->group(function () {
     Route::resource('departments', DepartmentController::class);
     Route::resource('files', FileController::class)->middleware(['role:super-admin|admin|primary-user']);
     Route::put('/files/{id}', [FileController::class, 'update'])->name('files.update');
-    Route::post('/files/{file}/send-to-record-room', [FileController::class, 'sendToRecordRoom'])->name('files.sendToRecordRoom');
-    Route::post('/files/update-status', [FileController::class, 'updateStatus'])->name('files.updateStatus');
+    Route::post('/files/send-to-record-room', [FileController::class, 'sendToRecordRoom'])->name('files.sendToRecordRoom');
+});
+
+Route::middleware(['auth', 'role:super-admin'])->group(function () {
+    Route::get('/record-room', [FileController::class, 'recordRoomIndex'])->name('record-room.index');
+    Route::post('/files/{id}/assign-rack-location', [FileController::class, 'assignRackLocation'])->name('files.assignRackLocation');
+    Route::post('/files/{id}/store-record-room', [FileController::class, 'storeRecordRoom'])->name('files.storeRecordRoom');  // New route for storing in record room
+});
+
+
+Route::middleware(['auth', 'role:super-admin|admin|primary-user'])->group(function () {
+    Route::get('/files', [FileController::class, 'index'])->name('files.index');
+    Route::put('/files/{id}', [FileController::class, 'update'])->name('files.update');
 });
 
 Route::group(['middleware' => ['role:super-admin|admin']], function () {
@@ -48,6 +60,17 @@ Route::group(['middleware' => ['role:super-admin|admin']], function () {
         Route::get('users/{userId}/delete', [App\Http\Controllers\UserController::class, 'destroy']);
     });
     
+
+
+
+
+
+
+
+
+
+
+
 
 // Add this route to check admin role permissions
 Route::get('/check-admin-permissions', function() {
@@ -79,6 +102,5 @@ Route::get('/check-super-admin-permissions', function() {
     return response()->json($permissions);
 });
 
-Route::post('/files/send-to-record-room', [FileController::class, 'sendToRecordRoom'])->name('files.send-to-record-room');
 
 require __DIR__.'/auth.php';

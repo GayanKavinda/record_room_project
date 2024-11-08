@@ -215,19 +215,23 @@
         });
 
         function sendToRecordRoom(fileId) {
-    fetch(`/files/${fileId}/send-to-record-room`, {
+    fetch('/files/send-to-record-room', {
         method: 'POST',
         headers: {
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-        }
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ file_id: fileId })
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) throw new Error('Failed to send file');
+        return response.json();
+    })
     .then(data => {
         if (data.success) {
-            alert(data.message);
-            location.reload(); // Reload to update the table status
+            location.reload(); // Reload the page if successful
         } else {
-            alert('Error: ' + data.message);
+            alert(data.message);
         }
     })
     .catch(error => {
@@ -235,26 +239,5 @@
         alert('An error occurred while sending the file to the record room.');
     });
 }
-
-function updateStatus(fileId) {
-        $.ajax({
-            url: "{{ route('files.updateStatus') }}",
-            type: "POST",
-            data: {
-                id: fileId,
-                _token: "{{ csrf_token() }}"
-            },
-            success: function(response) {
-                if (response.status === 'success') {
-                    // Update button to show 'Locked' and disable it
-                    $('#edit-button-' + fileId).attr('disabled', true).text('Locked');
-                    $('#edit-button-' + fileId).addClass('disabled:bg-disabled-gray disabled:text-gray-400');
-                }
-            },
-            error: function(error) {
-                console.log(error);
-            }
-        });
-    }
     </script>
 </x-app-layout>
