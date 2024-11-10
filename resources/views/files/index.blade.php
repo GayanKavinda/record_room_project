@@ -42,66 +42,79 @@
 
             <!-- Table Container -->
             <div class="overflow-x-auto">
-                <table class="min-w-full border-collapse border border-gray-300">
-                    <thead class="bg-gray-200 dark:bg-gray-700">
-                        <tr>
-                            <th class="border px-3 py-2 text-left text-gray-900 dark:text-gray-100 text-sm">File No</th>
-                            <th class="border px-3 py-2 text-left text-gray-900 dark:text-gray-100 text-sm">Responsible Officer</th>
-                            <th class="border px-3 py-2 text-left text-gray-900 dark:text-gray-100 text-sm">Open Date</th>
-                            <th class="border px-3 py-2 text-left text-gray-900 dark:text-gray-100 text-sm">Close Date</th>
-                            <th class="border px-3 py-2 text-left text-gray-900 dark:text-gray-100 text-sm">Given Date</th>
-                            <th class="border px-3 py-2 text-left text-gray-900 dark:text-gray-100 text-sm">Page Capacity</th>
-                            <th class="border px-3 py-2 text-left text-gray-900 dark:text-gray-100 text-sm">Note</th>
-                            <!-- Add a new column in the table for status -->
-                            <th class="border px-3 py-2 text-left text-gray-900 dark:text-gray-100 text-sm">Status</th>
-                            <th class="border px-3 py-2 text-left text-gray-900 dark:text-gray-100 text-sm">Expire Date</th>
-                            <th class="border px-3 py-2 text-left text-gray-900 dark:text-gray-100 text-sm">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody class="bg-white dark:bg-gray-800">
-                        @foreach ($files as $file)
-                            <tr data-file-id="{{ $file->id }}" class="bg-white dark:bg-gray-800">
-                                <td class="border px-3 py-2 text-gray-900 dark:text-gray-200 text-sm">{{ $file->file_no }}</td>
-                                <td class="border px-3 py-2 text-gray-900 dark:text-gray-200 text-sm">{{ $file->responsible_officer }}</td>
-                                <td class="border px-3 py-2 text-gray-900 dark:text-gray-200 text-sm">{{ $file->open_date }}</td>
-                                <td class="border px-3 py-2 text-gray-900 dark:text-gray-200 text-sm">{{ $file->close_date ?? 'N/A' }}</td>
-                                <td class="border px-3 py-2 text-gray-900 dark:text-gray-200 text-sm">{{ $file->given_date }}</td>
-                                <td class="border px-3 py-2 text-gray-900 dark:text-gray-200 text-sm">{{ $file->page_capacity }}</td>
-                                <td class="border px-3 py-2 text-gray-900 dark:text-gray-200 text-sm text-wrap">{{ $file->note }}</td>
-                                <td class="border px-3 py-2 text-gray-900 dark:text-gray-200 text-sm">{{ $file->status }}</td>
-                                <td class="border px-3 py-2 text-gray-900 dark:text-gray-200 text-sm">{{ $file->expire_date }}</td>
-                                <td class="border px-3 py-2">
-                                    <!-- Show Button -->
-                                    <a href="{{ route('files.show', $file->id) }}" 
-                                       class="bg-green-500 hover:bg-green-600 text-white font-semibold py-1 px-2 rounded mr-2 text-sm">
-                                        Show
-                                    </a>
+                <table class="min-w-full border-collapse border border-gray-300 rounded mb-4">
+                <thead class="bg-gradient-to-r from-indigo-500 via-violet-500 to-purple-500 text-white">
+                    <tr>
+                        <th class="border px-3 py-2 text-left text-sm">FILE NO</th>
+                        <th class="border px-3 py-2 text-left text-sm">RESPONSIBLE OFFICER</th>
+                        <th class="border px-3 py-2 text-left text-sm">OPEN DATE</th>
+                        <th class="border px-3 py-2 text-left text-sm">CLOSE DATE</th>
+                        <th class="border px-3 py-2 text-left text-sm">GIVEN DATE</th>
+                        <th class="border px-3 py-2 text-left text-sm">PAGE CAPACITY</th>
+                        <th class="border px-3 py-2 text-left text-sm">NOTE</th>
+                        <!-- Status Column -->
+                        <th class="border px-3 py-2 text-left text-sm">STATUS</th>
+                        <th class="border px-3 py-2 text-left text-sm">EXPIRE DATE</th>
+                        <th class="border px-3 py-2 text-left text-sm">ACTIONS</th>
+                    </tr>
+                </thead>
 
-                                    <!-- Conditionally disable the Edit and Delete buttons if status is Pending -->
-                                    <button onclick="openModal({{ $file->id }}, '{{ addslashes($file->file_no) }}', '{{ addslashes($file->responsible_officer) }}', '{{ $file->given_date }}', '{{ $file->page_capacity }}', '{{ addslashes($file->note) }}', '{{ $file->expire_date }}')"
-                                    style="{{ $file->status === 'Pending' ? 'background-color: #b0b0b0; color: #666666;' : '' }}"
+                    <tbody class="text-sm text-gray-700 dark:text-gray-200">
+                    @foreach ($files as $file)
+                    <tr data-file-id="{{ $file->id }}" class="hover:bg-green-100 dark:hover:bg-emerald-700 transition-all duration-300">
+                        <td class="border px-3 py-2 text-gray-900 dark:text-gray-200 text-sm">{{ $file->file_no }}</td>
+                        <td class="border px-3 py-2 text-gray-900 dark:text-gray-200 text-sm">{{ $file->responsible_officer }}</td>
+                        <td class="border px-3 py-2 text-gray-900 dark:text-gray-200 text-sm">{{ $file->open_date }}</td>
+                        <td class="border px-3 py-2 text-gray-900 dark:text-gray-200 text-sm">{{ $file->close_date ?? 'N/A' }}</td>
+                        <td class="border px-3 py-2 text-gray-900 dark:text-gray-200 text-sm">{{ $file->given_date }}</td>
+                        <td class="border px-3 py-2 text-gray-900 dark:text-gray-200 text-sm">{{ $file->page_capacity }}</td>
+                        <td class="border px-3 py-2 text-gray-900 dark:text-gray-200 text-sm text-wrap">{{ $file->note }}</td>
+                        <td class="border px-3 py-2 text-gray-900 dark:text-gray-200 text-sm" id="status-cell-{{ $file->id }}">{{ $file->status }}</td>
+                        <td class="border px-3 py-2 text-gray-900 dark:text-gray-200 text-sm">{{ $file->expire_date }}</td>
+                        <td class="border px-3 py-2">
+                            <!-- Show Button -->
+                            <a href="{{ route('files.show', $file->id) }}" 
+                            class="bg-green-500 hover:bg-green-600 text-white font-semibold py-1 px-2 rounded mr-2 text-sm">
+                                Show
+                            </a>
+
+                            <!-- Edit Button -->
+                            <button id="edit-button-{{ $file->id }}"
+                                    onclick="openModal({{ $file->id }}, '{{ addslashes($file->file_no) }}', '{{ addslashes($file->responsible_officer) }}', '{{ $file->given_date }}', '{{ $file->page_capacity }}', '{{ addslashes($file->note) }}', '{{ $file->expire_date }}')"
                                     class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-2 rounded text-sm"
-                    onclick="updateStatus({{ $file->id }})"
-                    id="edit-button-{{ $file->id }}"
-                    {{ $file->status === 'Pending' ? 'disabled' : '' }}>
-                    {{ $file->status === 'Pending' ? 'Locked Edit' : 'Edit' }}
-                                    </button>
-                                    <form action="{{ route('files.destroy', $file->id) }}" method="POST" class="inline-block">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="bg-red-500 hover:bg-red-600 text-white font-semibold py-1 px-2 rounded text-sm" {{ $file->status === 'Pending' ? 'disabled' : '' }}>
-                                            Delete
-                                        </button>
-                                    </form>
+                                    style="{{ $file->status === 'Pending' || $file->status === 'Stored' ? 'background-color: #b0b0b0; color: #666666;' : '' }}"
+                                    {{ $file->status === 'Pending' || $file->status === 'Stored' ? 'disabled' : '' }}>
+                                {{ $file->status === 'Pending' || $file->status === 'Stored' ? 'Locked Edit' : 'Edit' }}
+                            </button>
 
-                                                                        <!-- Send to Record Room button -->
-                                    <button onclick="sendToRecordRoom({{ $file->id }})"
-                                            class="bg-gray-500 hover:bg-gray-700 text-white font-semibold py-1 px-2 rounded text-sm">
-                                        Send to Record Room
-                                    </button>
-                                </td>
-                            </tr>
-                        @endforeach
+                            <!-- Delete Button -->
+                            <form action="{{ route('files.destroy', $file->id) }}" method="POST" class="inline-block">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" 
+                                        id="delete-button-{{ $file->id }}" 
+                                        class="bg-red-500 hover:bg-red-600 text-white font-semibold py-1 px-2 rounded text-sm" 
+                                        {{ $file->status === 'Pending' || $file->status === 'Stored' ? 'disabled' : '' }}>
+                                    Delete
+                                </button>
+                            </form>
+
+                            <!-- Conditionally render the 'Send to Record Room' button based on status -->
+                            @if ($file->status !== 'Stored' && $file->status !== 'Pending')
+                            <button id="send-button-{{ $file->id }}"
+                                    onclick="sendToRecordRoom({{ $file->id }})"
+                                    class="bg-gray-500 hover:bg-gray-700 text-white font-semibold py-1 px-2 rounded text-sm mt-2">
+                                Send to Record Room
+                            </button>
+                            @elseif ($file->status === 'Pending')
+                                <!-- Display a message or allow rack assignment -->
+                                <span class="text-gray-500 mt-2">File is pending rack assignment.</span>
+                            @else
+                                <span class="text-gray-500 mt-2">File Stored</span>
+                            @endif
+                        </td>
+                    </tr>
+                    @endforeach
                     </tbody>
                 </table>
             </div>
@@ -171,50 +184,69 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script>
-        function openModal(id, fileNo, responsibleOfficer, givenDate, pageCapacity, note, expireDate) {
-            document.getElementById('modal_file_no').value = fileNo;
-            document.getElementById('modal_responsible_officer').value = responsibleOfficer;
-            document.getElementById('modal_given_date').value = givenDate;
-            document.getElementById('modal_page_capacity').value = pageCapacity;
-            document.getElementById('modal_note').value = note;
-            document.getElementById('modal_expire_date').value = expireDate;
-            document.getElementById('editForm').action = '/files/' + id; // Set the action to the correct route
-            document.getElementById('editModal').classList.remove('hidden');
-        }
+    function openModal(id, fileNo, responsibleOfficer, givenDate, pageCapacity, note, expireDate) {
+        document.getElementById('modal_file_no').value = fileNo;
+        document.getElementById('modal_responsible_officer').value = responsibleOfficer;
+        document.getElementById('modal_given_date').value = givenDate;
+        document.getElementById('modal_page_capacity').value = pageCapacity;
+        document.getElementById('modal_note').value = note;
+        document.getElementById('modal_expire_date').value = expireDate;
+        document.getElementById('editForm').action = '/files/' + id; // Set the action to the correct route
+        document.getElementById('editModal').classList.remove('hidden');
+    }
 
-        function closeModal() {
-            document.getElementById('editModal').classList.add('hidden');
-        }
+    function closeModal() {
+        document.getElementById('editModal').classList.add('hidden');
+    }
 
-        document.getElementById('editForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const formData = new FormData(this);
+    document.getElementById('editForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const formData = new FormData(this);
 
-            fetch(this.action, {
-                method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                },
-                body: formData
-            })
-            .then(response => {
-                if (!response.ok) {
-                    return response.json().then(errorData => { throw errorData; });
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.success) {
-                    location.reload(); // Reload the page on success
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert(error.message || 'An error occurred while updating the file.');
-            });
+        fetch(this.action, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(errorData => { throw errorData; });
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                location.reload(); // Reload the page on success
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert(error.message || 'An error occurred while updating the file.');
         });
+    });
 
-        function sendToRecordRoom(fileId) {
+    function sendToRecordRoom(fileId) {
+    const sendButton = document.getElementById(`send-button-${fileId}`);
+    const editButton = document.getElementById(`edit-button-${fileId}`);
+    const deleteButton = document.getElementById(`delete-button-${fileId}`);
+    const statusCell = document.getElementById(`status-cell-${fileId}`);
+
+    // Disable the send button immediately
+    sendButton.disabled = true;
+    sendButton.classList.add('bg-gray-400', 'cursor-not-allowed');
+    sendButton.classList.remove('hover:bg-gray-700');
+
+    // Disable the Edit and Delete buttons if status is not 'Stored'
+    if (editButton && deleteButton) {
+        editButton.disabled = true;
+        deleteButton.disabled = true;
+        editButton.classList.add('bg-gray-400', 'cursor-not-allowed');
+        deleteButton.classList.add('bg-gray-400', 'cursor-not-allowed');
+    }
+
+    // Update the file status to 'Pending'
     fetch('/files/send-to-record-room', {
         method: 'POST',
         headers: {
@@ -223,13 +255,12 @@
         },
         body: JSON.stringify({ file_id: fileId })
     })
-    .then(response => {
-        if (!response.ok) throw new Error('Failed to send file');
-        return response.json();
-    })
+    .then(response => response.json())
     .then(data => {
         if (data.success) {
-            location.reload(); // Reload the page if successful
+            // Update the file status on the UI
+            statusCell.textContent = 'Pending';
+            alert("File status updated to Pending. Please assign a rack.");
         } else {
             alert(data.message);
         }
@@ -239,5 +270,39 @@
         alert('An error occurred while sending the file to the record room.');
     });
 }
-    </script>
+
+
+// When rack is assigned, update the file status to 'Stored'
+function assignRack(fileId, rackDetails) {
+    fetch('/files/assign-rack', {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            file_id: fileId,
+            rack_details: rackDetails
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Change the button text to "File Stored"
+            const sendButton = document.getElementById(`send-button-${fileId}`);
+            sendButton.textContent = 'File Stored';
+            sendButton.classList.remove('bg-gray-500');
+            sendButton.classList.add('bg-gray-300');
+        } else {
+            alert(data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while assigning the rack.');
+    });
+}
+
+</script>
+
 </x-app-layout>

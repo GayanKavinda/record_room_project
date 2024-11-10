@@ -46,6 +46,7 @@
                 </header>
             @endif
 
+            @yield('content')
             <!-- Page Content -->
             <main>
                 {{ $slot }}

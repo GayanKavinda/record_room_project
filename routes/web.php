@@ -11,11 +11,18 @@ use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
 
 
-
-
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/about', function () {
+    return view('about');
+})->name('about');
+
+Route::get('/contact', function () {
+    return view('contact');
+})->name('contact');
+
 
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'verified'])
@@ -36,6 +43,7 @@ Route::middleware(['auth', 'role:super-admin'])->group(function () {
     Route::get('/record-room', [FileController::class, 'recordRoomIndex'])->name('record-room.index');
     Route::post('/files/{id}/assign-rack-location', [FileController::class, 'assignRackLocation'])->name('files.assignRackLocation');
     Route::post('/files/{id}/store-record-room', [FileController::class, 'storeRecordRoom'])->name('files.storeRecordRoom');  // New route for storing in record room
+    Route::get('/stored-files', [FileController::class, 'storedFiles'])->name('record-room.storedFiles');
 });
 
 

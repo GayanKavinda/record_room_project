@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Models\File;
 use Illuminate\Http\Request;
 use App\Rules\FileNoFormat;
@@ -10,7 +9,6 @@ use App\Models\Department; // Import your Department model
 use Illuminate\Validation\ValidationException;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use App\Models\RecordRoom;
-
 
 
 class FileController extends Controller
@@ -37,10 +35,8 @@ class FileController extends Controller
             // Primary users see all files
             $files = File::all();
         }
-
         return request()->ajax() ? response()->json($files) : view('files.index', compact('files'));
     }
-
 
     // Show the form for creating a new file
     public function create()
@@ -60,7 +56,6 @@ class FileController extends Controller
 }
 
 
-
     // Store a newly created file in storage
     public function store(Request $request)
 {
@@ -75,7 +70,6 @@ class FileController extends Controller
 
     // Fetch the department using department_name
     $department = Department::where('department_name', $request->department_name)->first();
-
     if (!$department) {
         return back()->withErrors(['department_name' => 'Department not found.']);
     }
@@ -90,7 +84,6 @@ class FileController extends Controller
         'close_date' => $request->close_date,
         'department_no' => $department->department_no ?? 0,  // This should not be NULL
     ]);
-
     return redirect()->route('files.index')->with('success', 'File created successfully.');
 }
 
@@ -110,7 +103,6 @@ class FileController extends Controller
         } else {
             $departments = Department::where('department_name', $user->department_name)->get();
         }
-
         return view('files.edit', compact('file', 'departments'));
     }
 
@@ -156,15 +148,18 @@ class FileController extends Controller
      * Send the file to the record room by updating its status.
      */
     public function sendToRecordRoom(Request $request)
-    {
-        $file = File::findOrFail($request->file_id);
+{
+    $fileId = $request->file_id;
 
-        // Update the status to Pending
-        $file->status = 'Pending';
-        $file->save();
+    // Update the file status to 'Pending'
+    $file = File::find($fileId);
+    $file->status = 'Pending';
+    $file->save();
 
-        return response()->json(['success' => true, 'message' => 'File sent to record room.']);
-    }
+    return response()->json(['success' => true, 'status' => 'Pending']);
+}
+
+
 
     public function recordRoomIndex()
     {
@@ -174,31 +169,42 @@ class FileController extends Controller
         return view('record_room.index', compact('files'));
     }
 
+    // Assign Rack Location and Update File Status
     public function assignRackLocation(Request $request, $id)
     {
         $file = File::findOrFail($id);
 
+        // Validate the rack assignment input
         $request->validate([
             'rack_letter' => 'required|string|max:1',
             'sub_rack' => 'required|integer',
             'cell_number' => 'required|integer',
         ]);
 
+        // Assign the rack location to the file
         $file->rack_letter = $request->rack_letter;
         $file->sub_rack = $request->sub_rack;
         $file->cell_number = $request->cell_number;
-        $file->status = 'Rack Assigned';
+
+        // Update the status to 'Stored' after assigning the rack
+        $file->status = 'Stored';
         $file->save();
 
-        return redirect()->route('record-room.index')->with('success', 'Rack location assigned successfully.');
+        // Return a success response and update the front end
+        if ($request->ajax()) {
+            return response()->json(['success' => true, 'status' => 'Stored']);
+        }
+
+        return redirect()->route('record-room.storedFiles')->with('success', 'File successfully stored in the record room.');
     }
 
+    // Store the file after the rack has been assigned
     public function storeRecordRoom($id)
     {
         $file = File::findOrFail($id);
 
-        // Check if the file status is Rack Assigned before storing it
-        if ($file->status === 'Rack Assigned') {
+        // Check if the file status is "Pending" before storing it
+        if ($file->status === 'Pending') {
             $file->status = 'Stored'; // Change status to 'Stored'
             $file->save();
 
@@ -206,5 +212,11 @@ class FileController extends Controller
         }
 
         return redirect()->route('record-room.index')->with('error', 'Cannot store file. It needs to be rack assigned first.');
+    }
+
+    public function storedFiles()
+    {
+        $storedFiles = File::where('status', 'Stored')->with('department')->get();
+        return view('record_room.stored_files', compact('storedFiles'));
     }
 }
