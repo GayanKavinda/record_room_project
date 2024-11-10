@@ -1,4 +1,4 @@
-# 📂 Record Room Management System
+# 📂 Record Room Management System For Ministry of Home Affairs in Sri Lanka (IT Division)
 
 A Laravel-based application for efficient tracking and management of files, departments, and record locations. The system includes role-based access and permission controls, designed for seamless usage and optimized with Tailwind CSS.
 
@@ -91,6 +91,24 @@ The system is built using Laravel MVC with Tailwind CSS for styling. Here’s an
 
 ---
 
+## 👥 Developers
+
+This project was developed by a team of talented individuals:
+
+- **Gayan Kavinda**  
+  - Institution: SLIIT University  
+  - Role: Fresh Graduate  
+
+- **Didula Senevirathna**  
+  - Institution: IIT University  
+
+- **Nipuna Gamage**  
+  - Institution: IIT University  
+
+Each developer has contributed to various parts of this project to create a comprehensive and functional record management system. Special thanks to all team members for their dedication and contributions.
+
+---
+
 ## 🤝 Contribution
 
 Contributions are welcome! To contribute:
@@ -101,6 +119,8 @@ Contributions are welcome! To contribute:
 
 ---
 
-## 📜 License
+## 📜 Ownership & License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+All rights to the codebase belong to the developers mentioned above. Please credit the authors if using or modifying parts of this project. Unauthorized copying or redistribution of substantial parts of this project is not permitted without prior permission from the authors.
