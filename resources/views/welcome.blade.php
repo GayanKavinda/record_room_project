@@ -15,6 +15,20 @@
         body {
             font-family: Arial, sans-serif;
         }
+
+        /* .video-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1; 
+            opacity: 0.7;
+        } */
+/* Ensure the video stays behind content */
+ /* Adjust opacity as needed */
+
         .parallax-bg {
             background-image: url("{{ asset('images/magenta-nature.jpg') }}");
             background-attachment: fixed;
@@ -80,6 +94,12 @@
 
     <!-- Hero Section with Parallax and Animation -->
     <section class="parallax-bg h-screen flex items-center justify-center text-white text-shadow">
+        <!-- Background Video -->
+        <!-- <video autoplay loop muted playsinline class="video-bg">
+            <source src="{{ asset('videos/Mysterious Dragon Samurai Kneeling at Torii Gate_ 4k Live Wallpaper.mp4') }}" type="video/mp4">
+            Your browser does not support the video tag.
+        </video> -->
+
         <div class="text-center transform transition duration-700 ease-in-out hover:scale-105">
             <h1 class="text-4xl md:text-5xl font-bold mb-4 animate__animated animate__fadeInDown">Welcome to Record Room</h1>
             <p class="text-lg md:text-xl mb-8 animate__animated animate__fadeInUp animate__delay-1s">Your efficient library management solution</p>
