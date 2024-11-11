@@ -88,6 +88,20 @@
                 left: -100%;
             }
         }
+
+        /* Add keyframes for animation */
+        @keyframes icon-bounce {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.2) rotate(15deg); }
+        }
+
+        /* Style for footer links with icon animation on hover */
+        .footer-links a i {
+            transition: transform 0.3s ease-in-out;
+        }
+        .footer-links a:hover i {
+            animation: icon-bounce 0.6s forwards;
+        }
     </style>
 </head>
 <body class="bg-gray-50 scroll-smooth">
@@ -161,9 +175,9 @@
             </p>
             <p class="text-sm font-semibold">Developed by:</p>
             <p class="text-sm">
-                <a href="https://github.com/gayan" class="text-yellow-400 hover:text-white transition duration-300">Gayan</a> |
-                <a href="https://github.com/didula" class="text-yellow-400 hover:text-white transition duration-300">Didula</a> |
-                <a href="https://github.com/nipuna" class="text-yellow-400 hover:text-white transition duration-300">Nipuna</a>
+                <a href="#" class="text-yellow-400 hover:text-white transition duration-300">Gayan</a> |
+                <a href="#" class="text-yellow-400 hover:text-white transition duration-300">Didula</a> |
+                <a href="#" class="text-yellow-400 hover:text-white transition duration-300">Nipuna</a>
             </p>
         </div>
 
