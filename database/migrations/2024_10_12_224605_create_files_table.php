@@ -20,6 +20,9 @@ return new class extends Migration
             $table->bigInteger('department_no')->unsigned(); // or wherever appropriate
             $table->timestamps();
         });
+
+        // Change the charset and collation after the table creation
+        DB::statement('ALTER TABLE files CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci');
     }
 
     /**

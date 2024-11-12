@@ -15,6 +15,9 @@ return new class extends Migration
             $table->boolean('is_editable')->default(true)->after('note'); // Enable edit button by default
             $table->boolean('is_expirable')->default(false)->after('is_editable'); // Disable expire button by default
         });
+
+        // Change the charset and collation after modifying the table
+        DB::statement('ALTER TABLE files CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci');
     }
 
     /**

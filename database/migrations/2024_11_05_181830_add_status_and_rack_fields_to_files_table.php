@@ -17,6 +17,9 @@ return new class extends Migration
             $table->integer('sub_rack')->nullable()->after('rack_letter');
             $table->integer('cell_number')->nullable()->after('sub_rack');
         });
+
+        // Change the charset and collation after modifying the table
+        DB::statement('ALTER TABLE files CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci');
     }
 
     /**

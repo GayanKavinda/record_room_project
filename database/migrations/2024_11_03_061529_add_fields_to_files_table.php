@@ -17,6 +17,9 @@ return new class extends Migration
             $table->text('note')->nullable()->after('page_capacity');
             $table->date('expire_date')->nullable()->after('note');
         });
+
+        // Change the charset and collation after the table modification
+        DB::statement('ALTER TABLE files CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci');
     }
 
     /**

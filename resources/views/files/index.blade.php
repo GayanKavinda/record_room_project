@@ -7,7 +7,8 @@
             <!-- Create New File Button -->
             @if(Auth::user()->hasRole('super-admin') || Auth::user()->hasRole('admin'))
             <a href="{{ route('files.create') }}" 
-               class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4 inline-block">
+                class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4 inline-flex items-center transition duration-300 ease-in-out transform hover:scale-105">
+                <i class="fas fa-plus mr-2"></i> <!-- Icon for 'Create' -->
                 Create New File
             </a>
             @endif
@@ -72,46 +73,62 @@
                         <td class="border px-3 py-2 text-gray-900 dark:text-gray-200 text-sm" id="status-cell-{{ $file->id }}">{{ $file->status }}</td>
                         <td class="border px-3 py-2 text-gray-900 dark:text-gray-200 text-sm">{{ $file->expire_date }}</td>
                         <td class="border px-3 py-2">
-                            <!-- Show Button -->
-                            <a href="{{ route('files.show', $file->id) }}" 
-                            class="bg-green-500 hover:bg-green-600 text-white font-semibold py-1 px-2 rounded mr-2 text-sm">
+                            <!-- Wrapper for buttons -->
+                            <div class="flex flex-col space-y-2"> <!-- Using vertical spacing for stacked buttons -->
+
+                                <!-- Show Button -->
+                                <a href="{{ route('files.show', $file->id) }}" 
+                                class="bg-gradient-to-r from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 text-white font-semibold py-1 px-2 rounded text-sm inline-flex items-center transition duration-300 ease-in-out transform hover:scale-105 mb-2">
+                                <i class="fa-solid fa-face-grin-hearts mr-1"></i>
                                 Show
-                            </a>
+                                </a>
 
-                            <!-- Edit Button -->
-                            <button id="edit-button-{{ $file->id }}"
-                                    onclick="openModal({{ $file->id }}, '{{ addslashes($file->file_no) }}', '{{ addslashes($file->responsible_officer) }}', '{{ $file->given_date }}', '{{ $file->page_capacity }}', '{{ addslashes($file->note) }}', '{{ $file->expire_date }}')"
-                                    class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-2 rounded text-sm"
-                                    style="{{ $file->status === 'Pending' || $file->status === 'Stored' ? 'background-color: #b0b0b0; color: #666666;' : '' }}"
-                                    {{ $file->status === 'Pending' || $file->status === 'Stored' ? 'disabled' : '' }}>
-                                {{ $file->status === 'Pending' || $file->status === 'Stored' ? 'Locked Edit' : 'Edit' }}
-                            </button>
-
-                            <!-- Delete Button -->
-                            <form action="{{ route('files.destroy', $file->id) }}" method="POST" class="inline-block">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" 
-                                        id="delete-button-{{ $file->id }}" 
-                                        class="bg-red-500 hover:bg-red-600 text-white font-semibold py-1 px-2 rounded text-sm" 
+                                <!-- Edit Button -->
+                                <button id="edit-button-{{ $file->id }}"
+                                        onclick="openModal({{ $file->id }}, '{{ addslashes($file->file_no) }}', '{{ addslashes($file->responsible_officer) }}', '{{ $file->given_date }}', '{{ $file->page_capacity }}', '{{ addslashes($file->note) }}', '{{ $file->expire_date }}')"
+                                        class="bg-gradient-to-r from-blue-400 to-blue-600 hover:from-blue-500 hover:to-blue-700 text-white font-semibold py-1 px-2 rounded text-sm inline-flex items-center transition duration-300 ease-in-out transform hover:scale-105 mb-2 {{ $file->status === 'Pending' || $file->status === 'Stored' ? 'opacity-50 cursor-not-allowed' : '' }}"
                                         {{ $file->status === 'Pending' || $file->status === 'Stored' ? 'disabled' : '' }}>
-                                    Delete
+                                    <i class="fas fa-edit mr-1"></i>
+                                    {{ $file->status === 'Pending' || $file->status === 'Stored' ? 'Locked Edit' : 'Edit' }}
                                 </button>
-                            </form>
 
-                            <!-- Conditionally render the 'Send to Record Room' button based on status -->
-                            @if ($file->status !== 'Stored' && $file->status !== 'Pending')
-                            <button id="send-button-{{ $file->id }}"
-                                    onclick="sendToRecordRoom({{ $file->id }})"
-                                    class="bg-gray-500 hover:bg-gray-700 text-white font-semibold py-1 px-2 rounded text-sm mt-2">
-                                Send to Record Room
-                            </button>
-                            @elseif ($file->status === 'Pending')
-                                <!-- Display a message or allow rack assignment -->
-                                <span class="text-gray-500 mt-2">File is pending rack assignment.</span>
-                            @else
-                                <span class="text-gray-500 mt-2">File Stored</span>
-                            @endif
+                                <!-- Delete Button -->
+                                <form action="{{ route('files.destroy', $file->id) }}" method="POST" class="inline-block mb-2">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" 
+                                            id="delete-button-{{ $file->id }}" 
+                                            class="bg-gradient-to-r from-red-400 to-red-600 hover:from-red-500 hover:to-red-700 text-white font-semibold py-1 px-2 rounded text-sm inline-flex items-center transition duration-300 ease-in-out transform hover:scale-105 {{ $file->status === 'Pending' || $file->status === 'Stored' ? 'opacity-50 cursor-not-allowed' : '' }}"
+                                            {{ $file->status === 'Pending' || $file->status === 'Stored' ? 'disabled' : '' }}>
+                                        <i class="fas fa-trash-alt mr-1"></i>
+                                        Delete
+                                    </button>
+                                </form>
+                            </div>
+
+                            <!-- Separate div for the conditional 'Send to Record Room' button or messages -->
+                            <div class="mt-2">
+                                @if ($file->status !== 'Stored' && $file->status !== 'Pending')
+                                    <button id="send-button-{{ $file->id }}"
+                                            onclick="sendToRecordRoom({{ $file->id }})"
+                                            class="bg-gradient-to-r from-gray-400 to-gray-600 hover:from-gray-500 hover:to-gray-700 text-white font-semibold py-1 px-2 rounded text-sm transition duration-300 ease-in-out">
+                                        Send to Record Room
+                                    </button>
+                                    
+                                @elseif ($file->status === 'Pending')
+                                <!-- Display icon and outline for 'Pending' status -->
+                                <span class="flex items-center space-x-1 text-yellow-600 border border-yellow-500 rounded-lg px-2 py-1 bg-yellow-100">
+                                            <i class="fas fa-hourglass-half text-yellow-600"></i> <!-- Font Awesome icon for pending -->
+                                            <span>File is pending rack assignment.</span>
+                                        </span>
+                                    @else
+                                    <!-- Display icon and outline for 'File Stored' -->
+                                    <span class="flex items-center space-x-1 text-gray-500 border border-gray-400 rounded-lg px-2 py-1 bg-gray-100">
+                                        <i class="fas fa-check-circle text-green-500"></i> <!-- Font Awesome icon -->
+                                        <span>File Stored</span>
+                                    </span>
+                                @endif
+                            </div>
                         </td>
                     </tr>
                     @endforeach
