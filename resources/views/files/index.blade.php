@@ -1,7 +1,76 @@
 <x-app-layout>
     <div class="max-w-7xl mx-auto py-6 px-4">
+
         <!-- Main Card for All Files -->
         <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
+            <!-- Filter Form -->
+            <h1 class="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Filters</h1>
+            <form method="GET" action="{{ route('files.index') }}" class="mb-4" id="filter-form">
+    <div class="flex flex-wrap gap-4">
+        <!-- Status Filter -->
+        <div class="relative w-full md:w-1/6">
+            <label for="status" class="absolute left-3 top-2 text-gray-600 dark:text-gray-300"><i class="fas fa-tasks"></i></label>
+            <select name="status" id="status" class="form-select w-full p-2 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:outline-none pl-10">
+                <option value="">All Statuses</option>
+                <option value="Pending" {{ request('status') == 'Pending' ? 'selected' : '' }}>Pending</option>
+                <option value="Stored" {{ request('status') == 'Stored' ? 'selected' : '' }}>Stored</option>
+                <option value="Active" {{ request('status') == 'Active' ? 'selected' : '' }}>Active</option>        
+            </select>
+        </div>
+
+        <!-- Department Filter (Visible only for Super Admin) -->
+        @if(auth()->user()->hasRole('super-admin'))
+            <div class="relative w-full md:w-1/2">
+                <label for="department" class="absolute left-3 top-2 text-gray-600 dark:text-gray-300"><i class="fas fa-building"></i></label>
+                <select name="department" id="department" class="form-select w-full p-2 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:outline-none pl-10">
+                    <option value="">All Departments</option>
+                    @foreach($departments as $department)
+                        <option value="{{ $department->department_name }}" {{ request('department') == $department->department_name ? 'selected' : '' }}>
+                            {{ $department->department_name }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+        @endif
+
+        <!-- File Number Filter -->
+        <div class="relative w-full md:w-1/4">
+            <label for="file_no" class="absolute left-3 top-2 text-gray-600 dark:text-gray-300"><i class="fas fa-file-alt"></i></label>
+            <input type="text" name="file_no" id="file_no" placeholder="File Number" value="{{ request('file_no') }}" class="form-input w-full p-2 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:outline-none pl-10">
+        </div>
+
+        <!-- Responsible Officer Filter -->
+        <div class="relative w-full md:w-1/4">
+            <label for="responsible_officer" class="absolute left-3 top-2 text-gray-600 dark:text-gray-300"><i class="fas fa-user-tie"></i></label>
+            <input type="text" name="responsible_officer" id="responsible_officer" placeholder="Responsible Officer" value="{{ request('responsible_officer') }}" class="form-input w-full p-2 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:outline-none pl-10">
+        </div>
+
+        <!-- Date Range Filter for Open, Close, and Given Dates -->
+        <div class="flex w-full md:w-1/2 gap-4">
+            <div class="relative w-full">
+                <label for="date_filter" class="absolute left-3 top-2 text-gray-600 dark:text-gray-300"><i class="fas fa-calendar-day"></i></label>
+                <input type="date" name="date_filter" id="date_filter" value="{{ request('date_filter') }}" class="form-input w-full p-2 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:outline-none pl-10">
+            </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="w-full md:w-auto mt-4 md:mt-0">
+            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full md:w-auto transition duration-300 ease-in-out transform hover:scale-105">
+                <i class="fas fa-filter"></i> Filter
+            </button>
+        </div>
+
+        <!-- Reset Button -->
+        <div class="w-full md:w-auto mt-4 md:mt-0">
+            <button type="button" onclick="resetFilters()" class="bg-red-500 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded w-full md:w-auto transition duration-300 ease-in-out transform hover:scale-105">
+                <i class="fas fa-times"></i> Reset
+            </button>
+        </div>
+    </div>
+</form>
+
+            <br>
+
             <h1 class="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Files</h1>
 
             <!-- Create New File Button -->
@@ -51,11 +120,14 @@
                         <th class="border px-3 py-2 text-left text-sm">OPEN DATE</th>
                         <th class="border px-3 py-2 text-left text-sm">CLOSE DATE</th>
                         <th class="border px-3 py-2 text-left text-sm">GIVEN DATE</th>
-                        <th class="border px-3 py-2 text-left text-sm">PAGE CAPACITY</th>
-                        <th class="border px-3 py-2 text-left text-sm">NOTE</th>
+                        <!-- <th class="border px-3 py-2 text-left text-sm">PAGE CAPACITY</th> -->
+                        <!-- <th class="border px-3 py-2 text-left text-sm">NOTE</th> -->
                         <!-- Status Column -->
                         <th class="border px-3 py-2 text-left text-sm">STATUS</th>
                         <th class="border px-3 py-2 text-left text-sm">EXPIRE DATE</th>
+                        @if (Auth::user()->hasRole('super-admin'))
+                            <th class="border px-3 py-2 text-left text-sm">DEPARTMENT NAME</th>
+                        @endif
                         <th class="border px-3 py-2 text-left text-sm">ACTIONS</th>
                     </tr>
                 </thead>
@@ -68,88 +140,134 @@
                         <td class="border px-3 py-2 text-gray-900 dark:text-gray-200 text-sm">{{ $file->open_date }}</td>
                         <td class="border px-3 py-2 text-gray-900 dark:text-gray-200 text-sm">{{ $file->close_date ?? 'N/A' }}</td>
                         <td class="border px-3 py-2 text-gray-900 dark:text-gray-200 text-sm">{{ $file->given_date }}</td>
-                        <td class="border px-3 py-2 text-gray-900 dark:text-gray-200 text-sm">{{ $file->page_capacity }}</td>
-                        <td class="border px-3 py-2 text-gray-900 dark:text-gray-200 text-sm text-wrap">{{ $file->note }}</td>
+                        <!-- <td class="border px-3 py-2 text-gray-900 dark:text-gray-200 text-sm">{{ $file->page_capacity }}</td> -->
+                        <!-- <td class="border px-3 py-2 text-gray-900 dark:text-gray-200 text-sm text-wrap">{{ $file->note }}</td> -->
                         <td class="border px-3 py-2 text-gray-900 dark:text-gray-200 text-sm" id="status-cell-{{ $file->id }}">{{ $file->status }}</td>
                         <td class="border px-3 py-2 text-gray-900 dark:text-gray-200 text-sm">{{ $file->expire_date }}</td>
+                        @if (Auth::user()->hasRole('super-admin'))
+                            <td class="border px-3 py-2 text-gray-900 dark:text-gray-200 text-sm">{{ $file->department->department_name ?? 'N/A' }}</td>
+                        @endif
                         <!-- Table Container -->
                         <td class="border px-3 py-2">
-    <!-- Wrapper for buttons and status message -->
-    <div class="flex items-center justify-start space-x-2"> <!-- Flex to align horizontally -->
-        <!-- Show Button -->
-        <a href="{{ route('files.show', $file->id) }}" 
-            class="bg-gradient-to-r from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 text-white font-semibold py-1 px-2 rounded text-sm inline-flex items-center transition duration-300 ease-in-out transform hover:scale-105 whitespace-nowrap">
-            <i class="fa-solid fa-face-grin-hearts mr-1"></i> Show
-        </a>
+                        <!-- Wrapper for buttons and status message -->
+                        <div class="flex items-center justify-start space-x-2"> <!-- Flex to align horizontally -->
+                            <!-- Show Button -->
+                            <a href="{{ route('files.show', $file->id) }}" 
+                                class="bg-gradient-to-r from-green-400 to-yellow-200 hover:from-green-500 hover:to-green-700 text-white font-semibold py-1 px-2 rounded text-sm inline-flex items-center transition duration-300 ease-in-out transform hover:scale-105 whitespace-nowrap">
+                                <i class="fa-solid fa-face-grin-hearts mr-1"></i> Show
+                            </a>
 
-        <!-- Edit Button -->
-        <button id="edit-button-{{ $file->id }}"
-                onclick="openModal({{ $file->id }}, '{{ addslashes($file->file_no) }}', '{{ addslashes($file->responsible_officer) }}', '{{ $file->given_date }}', '{{ $file->page_capacity }}', '{{ addslashes($file->note) }}', '{{ $file->expire_date }}')"
-                class="bg-gradient-to-r from-blue-400 to-blue-600 hover:from-blue-500 hover:to-blue-700 text-white font-semibold py-1 px-2 rounded text-sm inline-flex items-center transition duration-300 ease-in-out transform hover:scale-105 whitespace-nowrap {{ $file->status === 'Pending' || $file->status === 'Stored' ? 'opacity-50 cursor-not-allowed' : '' }}"
-                {{ $file->status === 'Pending' || $file->status === 'Stored' ? 'disabled' : '' }}>
-            <i class="fas fa-edit mr-1"></i>
-            {{ $file->status === 'Pending' || $file->status === 'Stored' ? 'Locked Edit' : 'Edit' }}
-        </button>
+                            <!-- Edit Button -->
+                            <button id="edit-button-{{ $file->id }}"
+                                    onclick="openModal({{ $file->id }}, '{{ addslashes($file->file_no) }}', '{{ addslashes($file->responsible_officer) }}', '{{ $file->given_date }}', '{{ $file->page_capacity }}', '{{ addslashes($file->note) }}', '{{ $file->expire_date }}')"
+                                    class="bg-gradient-to-r from-blue-400 to-blue-600 hover:from-blue-500 hover:to-blue-700 text-white font-semibold py-1 px-2 rounded text-sm inline-flex items-center transition duration-300 ease-in-out transform hover:scale-105 whitespace-nowrap {{ $file->status === 'Pending' || $file->status === 'Stored' ? 'opacity-50 cursor-not-allowed' : '' }}"
+                                    {{ $file->status === 'Pending' || $file->status === 'Stored' ? 'disabled' : '' }}>
+                                <i class="fas fa-edit mr-1"></i>
+                                {{ $file->status === 'Pending' || $file->status === 'Stored' ? 'Locked Edit' : 'Edit' }}
+                            </button>
 
-        <!-- Delete Button -->
-        <form action="{{ route('files.destroy', $file->id) }}" method="POST" class="inline-block">
-            @csrf
-            @method('DELETE')
-            <button type="submit" 
-                    id="delete-button-{{ $file->id }}" 
-                    class="bg-gradient-to-r from-red-400 to-red-600 hover:from-red-500 hover:to-red-700 text-white font-semibold py-1 px-2 rounded text-sm inline-flex items-center transition duration-300 ease-in-out transform hover:scale-105 whitespace-nowrap {{ $file->status === 'Pending' || $file->status === 'Stored' ? 'opacity-50 cursor-not-allowed' : '' }}"
-                    {{ $file->status === 'Pending' || $file->status === 'Stored' ? 'disabled' : '' }}>
-                <i class="fas fa-trash-alt mr-1"></i> Delete
-            </button>
-        </form>
+                            <!-- Delete Button -->
+                            <form action="{{ route('files.destroy', $file->id) }}" method="POST" class="inline-block">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" 
+                                        id="delete-button-{{ $file->id }}" 
+                                        class="bg-gradient-to-r from-red-400 to-red-600 hover:from-red-500 hover:to-red-700 text-white font-semibold py-1 px-2 rounded text-sm inline-flex items-center transition duration-300 ease-in-out transform hover:scale-105 whitespace-nowrap {{ $file->status === 'Pending' || $file->status === 'Stored' ? 'opacity-50 cursor-not-allowed' : '' }}"
+                                        {{ $file->status === 'Pending' || $file->status === 'Stored' ? 'disabled' : '' }}>
+                                    <i class="fas fa-trash-alt mr-1"></i> Delete
+                                </button>
+                            </form>
 
-        <!-- Request Record File Button -->
-        <!-- @if ($file->status === 'Pending' || $file->status === 'Stored')
-            <button class="bg-gradient-to-r from-yellow-400 to-yellow-600 hover:from-yellow-500 hover:to-yellow-700 text-white font-semibold py-1 px-2 rounded text-sm inline-flex items-center transition duration-300 ease-in-out transform hover:scale-105 whitespace-nowrap">
-                <i class="fa-solid fa-file-arrow-down mr-1"></i> Request Record File
-            </button>
-        @endif -->
+                            <!-- Request Record File Button -->
+                            <!-- @if ($file->status === 'Pending' || $file->status === 'Stored')
+                                <button class="bg-gradient-to-r from-yellow-400 to-yellow-600 hover:from-yellow-500 hover:to-yellow-700 text-white font-semibold py-1 px-2 rounded text-sm inline-flex items-center transition duration-300 ease-in-out transform hover:scale-105 whitespace-nowrap">
+                                    <i class="fa-solid fa-file-arrow-down mr-1"></i> Request Record File
+                                </button>
+                            @endif -->
 
-        <!-- Request Record File Button -->
-        <form action="" method="POST">
-            @csrf
-            @if ($file->status === 'Stored')        <!-- $file->status === 'Pending' ||  -->
-                <button type="submit" class="bg-gradient-to-r from-yellow-400 to-yellow-600 hover:from-yellow-500 hover:to-yellow-700 text-white font-semibold py-1 px-2 rounded text-sm inline-flex items-center transition duration-300 ease-in-out transform hover:scale-105 whitespace-nowrap">
-                    <i class="fa-solid fa-file-arrow-down mr-1"></i> Request Record File
-                </button>
-            @endif
-        </form>
+                            <!-- Request Record File Button -->       <!-- $file->status === 'Pending' ||  -->
+                            <!-- <form action="" method="POST">
+                                @csrf
+                                @if ($file->status === 'Stored') 
+                                    <button type="submit" class="bg-gradient-to-r from-yellow-400 to-yellow-600 hover:from-yellow-500 hover:to-yellow-700 text-white font-semibold py-1 px-2 rounded text-sm inline-flex items-center transition duration-300 ease-in-out transform hover:scale-105 whitespace-nowrap">
+                                        <i class="fa-solid fa-file-arrow-down mr-1"></i> Request Record File
+                                    </button>
+                                @endif
+                            </form> -->
 
-        <!-- Send to Record Room Button or Status Message -->
-        <div class="ml-auto flex items-center space-x-2"> <!-- Align to the right side -->
-            @if ($file->status !== 'Stored' && $file->status !== 'Pending')
-                <button id="send-button-{{ $file->id }}"
-                        onclick="sendToRecordRoom({{ $file->id }})"
-                        class="bg-gradient-to-r from-gray-400 to-gray-600 hover:from-gray-500 hover:to-gray-700 text-white font-semibold py-1 px-2 rounded text-sm transition duration-300 ease-in-out whitespace-nowrap">
-                    Send to Record Room
-                </button>
-            @elseif ($file->status === 'Pending')
-                <!-- Display icon and outline for 'Pending' status -->
-                <span class="flex items-center space-x-1 text-yellow-600 border border-yellow-500 rounded-lg px-2 py-1 bg-yellow-100 whitespace-nowrap">
-                    <i class="fas fa-hourglass-half text-yellow-600"></i>
-                    <span>File is pending rack assignment.</span>
-                </span>
-            @else
-                <!-- Display icon and outline for 'File Stored' -->
-                <span class="flex items-center space-x-1 text-gray-500 border border-gray-400 rounded-lg px-2 py-1 bg-gray-100 whitespace-nowrap">
-                    <i class="fas fa-check-circle text-green-500"></i>
-                    <span>File Stored</span>
-                </span>
-            @endif
-        </div>
-    </div>
-</td>
-
-
+                            <!-- Send to Record Room Button or Status Message -->
+                            <div class="ml-auto flex items-center space-x-2"> <!-- Align to the right side -->
+                                @if ($file->status !== 'Stored' && $file->status !== 'Pending')
+                                    <button id="send-button-{{ $file->id }}"
+                                            onclick="sendToRecordRoom({{ $file->id }})"
+                                            class="bg-gradient-to-r from-gray-400 to-gray-600 hover:from-gray-500 hover:to-gray-700 text-white font-semibold py-1 px-2 rounded text-sm transition duration-300 ease-in-out whitespace-nowrap">
+                                        Send to Record Room
+                                    </button>
+                                @elseif ($file->status === 'Pending')
+                                    <!-- Display icon and outline for 'Pending' status -->
+                                    <span class="flex items-center space-x-1 text-yellow-600 border border-yellow-500 rounded-lg px-2 py-1 bg-yellow-100 whitespace-nowrap">
+                                        <i class="fas fa-hourglass-half text-yellow-600"></i>
+                                        <span>File is pending rack assignment.</span>
+                                    </span>
+                                @else
+                                    <!-- Display icon and outline for 'File Stored' -->
+                                    <span class="flex items-center space-x-1 text-gray-500 border border-gray-400 rounded-lg px-2 py-1 bg-gray-100 whitespace-nowrap">
+                                        <i class="fas fa-check-circle text-green-500"></i>
+                                        <span>File Stored</span>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+                    </td>
                     </tr>
                     @endforeach
                     </tbody>
                 </table>
+            </div>
+            
+            <!-- Pagination -->
+            <div class="flex justify-between items-center mt-4">
+                <!-- Custom text showing pagination info -->
+                <div class="text-sm text-gray-700">
+                    @if ($files->hasPages())
+                        <span>Showing {{ $files->firstItem() }} to {{ $files->lastItem() }} of {{ $files->total() }} results</span>
+                    @else
+                        <span>No results found</span>
+                    @endif
+                </div>
+
+                <!-- Custom Pagination Links -->
+                <div class="inline-flex items-center space-x-2">
+                    <!-- Previous Button -->
+                    @if ($files->onFirstPage())
+                        <span class="px-3 py-1 text-gray-500 bg-gray-100 cursor-not-allowed">Previous</span>
+                    @else
+                        <a href="{{ $files->previousPageUrl() }}" class="px-3 py-1 text-blue-600 hover:text-blue-800">Previous</a>
+                    @endif
+
+                    <!-- Page Numbers -->
+                    @foreach ($files->getUrlRange(max(1, $files->currentPage() - 5), min($files->lastPage(), $files->currentPage() + 5)) as $page => $url)
+                        @if ($page == $files->currentPage())
+                            <span class="px-3 py-1 text-white bg-blue-600">{{ $page }}</span>
+                        @else
+                            <a href="{{ $url }}" class="px-3 py-1 text-blue-600 hover:text-blue-800">{{ $page }}</a>
+                        @endif
+                    @endforeach
+
+                    <!-- Next Button -->
+                    @if ($files->hasMorePages())
+                        <a href="{{ $files->nextPageUrl() }}" class="px-3 py-1 text-blue-600 hover:text-blue-800">Next</a>
+                    @else
+                        <span class="px-3 py-1 text-gray-500 bg-gray-100 cursor-not-allowed">Next</span>
+                    @endif
+                </div>
+
+                <!-- Jump to Page Text Field and Go Button -->
+                <div class="flex items-center space-x-2 ml-4">
+                    <label for="jump-to-page" class="text-sm text-gray-700">Jump to page:</label>
+                    <input type="number" id="jump-to-page" min="1" max="{{ $files->lastPage() }}" class="px-3 py-1 border rounded text-sm w-16" value="{{ $files->currentPage() }}" aria-label="Page Number">
+                    <button onclick="goToPage()" class="px-3 py-1 text-white bg-blue-600 hover:bg-blue-800 rounded text-sm">Go</button>
+                </div>
             </div>
         </div>
     </div>
@@ -217,6 +335,19 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script>
+
+    // Reset the filter form and clear the URL parameters
+    function resetFilters() {
+        
+        // Reset form fields
+        document.getElementById('filter-form').reset();
+
+        // Clear URL query parameters by reloading the page without any parameters
+        const currentUrl = window.location.href.split('?')[0];
+        window.history.replaceState(null, '', currentUrl);
+        location.reload(); // Reload the page to reflect the reset
+    }
+
     function openModal(id, fileNo, responsibleOfficer, givenDate, pageCapacity, note, expireDate) {
         document.getElementById('modal_file_no').value = fileNo;
         document.getElementById('modal_responsible_officer').value = responsibleOfficer;
@@ -337,6 +468,16 @@ function assignRack(fileId, rackDetails) {
     });
 }
 
+function goToPage() {
+        var page = document.getElementById('jump-to-page').value;
+        var maxPage = {{ $files->lastPage() }};
+        if (page >= 1 && page <= maxPage) {
+            window.location.href = '?page=' + page;
+        } else {
+            alert('Please enter a valid page number between 1 and ' + maxPage);
+        }
+    }
 </script>
 
 </x-app-layout>
+

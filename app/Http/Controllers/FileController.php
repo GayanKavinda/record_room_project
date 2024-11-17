@@ -15,28 +15,63 @@ class FileController extends Controller
 {
     use AuthorizesRequests; // Add this line
 
-    public function index()
-    {
-        $user = Auth::user();
-        
-        if ($user->hasRole('super-admin')) {
-            // Super admins see all files
-            $files = File::all();
-        } elseif ($user->hasRole('admin')) {
-            // Admins only see files for their department
-            $department = Department::where('department_name', $user->department_name)->first();
-            
-            if ($department) {
-                $files = File::where('department_no', $department->department_no)->get();
-            } else {
-                $files = collect(); // Empty collection if department not found
-            }
-        } else {
-            // Primary users see all files
-            $files = File::all();
-        }
-        return request()->ajax() ? response()->json($files) : view('files.index', compact('files'));
+    public function index(Request $request)
+{
+    $user = Auth::user();
+    $query = File::query();
+
+    // Fetch all departments for the filter dropdown
+    $departments = Department::all();
+
+    // Apply filters based on request parameters
+    if ($request->filled('status')) {
+        $query->where('status', $request->input('status'));
     }
+
+    if ($request->filled('department')) {
+        $query->whereHas('department', function ($q) use ($request) {
+            $q->where('department_name', $request->input('department'));
+        });
+    }
+
+    if ($request->filled('file_no')) {
+        $query->where('file_no', 'like', '%' . $request->input('file_no') . '%');
+    }
+
+    if ($request->filled('responsible_officer')) {
+        $query->where('responsible_officer', 'like', '%' . $request->input('responsible_officer') . '%');
+    }
+
+    // Apply the unified date filter to Open Date, Close Date, and Given Date
+    if ($request->filled('date_filter')) {
+        $date = $request->input('date_filter');
+        $query->where(function ($q) use ($date) {
+            // Use whereDate to filter based on the date part only
+            $q->whereDate('open_date', $date)
+              ->orWhereDate('close_date', $date)
+              ->orWhereDate('given_date', $date);
+        });
+    }
+
+    // Apply role-based logic and paginate results
+    if ($user->hasRole('super-admin')) {
+        $files = $query->paginate(10); // Paginate for super-admins
+    } elseif ($user->hasRole('admin')) {
+        $department = Department::where('department_name', $user->department_name)->first();
+        if ($department) {
+            $files = $query->where('department_no', $department->department_no)->paginate(10); // Paginate for admins
+        } else {
+            $files = collect(); // No files for users without a department
+        }
+    } else {
+        $files = $query->paginate(10); // Paginate for other users
+    }
+
+    // Return JSON response for AJAX requests, or a view with the paginated data
+    return request()->ajax() ? response()->json($files) : view('files.index', compact('files', 'departments'));
+}
+
+
 
     // Show the form for creating a new file
     public function create()
@@ -214,9 +249,36 @@ class FileController extends Controller
         return redirect()->route('record-room.index')->with('error', 'Cannot store file. It needs to be rack assigned first.');
     }
 
-    public function storedFiles()
+    public function storedFiles(Request $request)
     {
-        $storedFiles = File::where('status', 'Stored')->with('department')->get();
-        return view('record_room.stored_files', compact('storedFiles'));
+        // Fetch all departments for the filter dropdown
+        $departments = Department::all();
+
+        $query = File::where('status', 'Stored')->with('department');
+
+        // Apply status filter if provided
+        if ($request->filled('status')) {
+            $query->where('status', $request->input('status'));
+        }
+
+        // Apply department filter if provided
+        if ($request->filled('department')) {
+            $query->whereHas('department', function ($q) use ($request) {
+                $q->where('department_name', $request->input('department'));
+            });
+        }
+
+        // Apply file number filter if provided
+        if ($request->filled('file_no')) {
+            $query->where('file_no', 'like', '%' . $request->input('file_no') . '%');
+        }
+
+        // Apply responsible officer filter if provided
+        if ($request->filled('responsible_officer')) {
+            $query->where('responsible_officer', 'like', '%' . $request->input('responsible_officer') . '%');
+        }
+
+        $storedFiles = $query->get();
+        return view('record_room.stored_files', compact('storedFiles', 'departments'));
     }
 }
