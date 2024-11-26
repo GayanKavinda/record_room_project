@@ -14,8 +14,12 @@ class UserController extends Controller
         // Fetch all users from the database
         $users = User::all();
 
+        // Get the total count of users
+        $totalUsers = User::count();
+
         return view('role-permission.user.index', [
             'users' => $users, // Pass the users to the view
+            'totalUsers' => $totalUsers, // Pass the total user count to the view
         ]);
     }
 
