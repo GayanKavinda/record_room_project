@@ -6,6 +6,7 @@ use App\Http\Controllers\FileController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ActivityLogController;
 use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
@@ -44,6 +45,9 @@ Route::middleware(['auth', 'role:super-admin'])->group(function () {
     Route::post('/files/{id}/assign-rack-location', [FileController::class, 'assignRackLocation'])->name('files.assignRackLocation');
     Route::post('/files/{id}/store-record-room', [FileController::class, 'storeRecordRoom'])->name('files.storeRecordRoom');  // New route for storing in record room
     Route::get('/stored-files', [FileController::class, 'storedFiles'])->name('record-room.storedFiles');
+
+    Route::get('/activity-logs', [ActivityLogController::class, 'index'])->middleware('auth')->name('activity.logs');
+
 });
 
 
