@@ -9,6 +9,8 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\UserActivityLogController;
 use App\Http\Controllers\DepartmentActivityLogController;
+use App\Http\Controllers\PermissionActivityLogController;
+use App\Models\PermissionActivityLog;
 use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
@@ -51,7 +53,12 @@ Route::middleware(['auth', 'role:super-admin'])->group(function () {
     Route::get('/activity-logs', [ActivityLogController::class, 'index'])->middleware('auth')->name('activity.logs');
     Route::get('/user-activity', [UserActivityLogController::class, 'index'])->name('user.activity.index');
     Route::get('/department-activity', [DepartmentActivityLogController::class, 'index'])->name('department.activity');
-
+    
+    // Define the route with a name for Permission Activity Logs
+    Route::get('/permission-activity-logs', function () {
+        $activityLogs = PermissionActivityLog::with('user')->latest()->paginate(10);
+        return view('activity_logs.permission_activity', compact('activityLogs'));
+    })->name('activity_logs.permission_activity'); // Add the name here
 });
 
 
