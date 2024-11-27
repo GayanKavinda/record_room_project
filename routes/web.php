@@ -7,6 +7,8 @@ use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ActivityLogController;
+use App\Http\Controllers\UserActivityLogController;
+use App\Http\Controllers\DepartmentActivityLogController;
 use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
@@ -47,6 +49,8 @@ Route::middleware(['auth', 'role:super-admin'])->group(function () {
     Route::get('/stored-files', [FileController::class, 'storedFiles'])->name('record-room.storedFiles');
 
     Route::get('/activity-logs', [ActivityLogController::class, 'index'])->middleware('auth')->name('activity.logs');
+    Route::get('/user-activity', [UserActivityLogController::class, 'index'])->name('user.activity.index');
+    Route::get('/department-activity', [DepartmentActivityLogController::class, 'index'])->name('department.activity');
 
 });
 

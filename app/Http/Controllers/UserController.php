@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\Department;
 use Spatie\Permission\Models\Role;
+use App\Models\UserActivityLog;
 
 class UserController extends Controller
 {
@@ -66,6 +67,13 @@ class UserController extends Controller
             'password' => bcrypt($request->password),
         ]);
 
+        // Log the activity (creating a user)
+        UserActivityLog::create([
+            'user_id' => auth()->id(),
+            'action' => 'Created User',
+            'details' => 'User ' . $user->name . ' (ID: ' . $user->id . ') was created.',
+        ]);
+
         $user->syncRoles($request->roles);
 
         // Redirect back with a success message
@@ -110,6 +118,9 @@ class UserController extends Controller
             'roles' => 'required'
         ]);
 
+        // Store the original values (before the update)
+        $originalData = $user->getOriginal();
+
         // Update the user data
         $data = [
             'employee_id' => $request->employee_id,
@@ -129,6 +140,23 @@ class UserController extends Controller
         // Update user details
         $user->update($data);
 
+        // Prepare the details for the activity log (what exactly was updated)
+        $changes = [];
+        foreach ($data as $key => $newValue) {
+            // Check if the value has actually changed
+            if ($originalData[$key] != $newValue) {
+                // Log the change in details
+                $changes[] = ucfirst(str_replace('_', ' ', $key)) . ': ' . $originalData[$key] . ' => ' . $newValue;
+            }
+        }
+
+        // Log the activity with the changes
+        UserActivityLog::create([
+            'user_id' => auth()->id(),
+            'action' => 'Updated User',
+            'details' => 'User ' . $user->name . ' (ID: ' . $user->id . ') was updated. Changes: ' . implode(', ', $changes),
+        ]);
+
         // Sync the roles
         $user->syncRoles($request->roles);
 
@@ -141,6 +169,13 @@ class UserController extends Controller
         $user = User::findOrFail($userId);
         $user->delete();
 
+        // Log the activity (deleting a user)
+        UserActivityLog::create([
+            'user_id' => auth()->id(),
+            'action' => 'Deleted User',
+            'details' => 'User ' . $user->name . ' (ID: ' . $user->id . ') was deleted.',
+        ]);
+        
         // Redirect back with a success message
         return redirect()->route('users.index')->with('success', 'User deleted successfully.');
 
