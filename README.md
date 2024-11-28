@@ -50,6 +50,19 @@ The system includes different sections for tracking activities related to files,
 
 ---
 
+## 🖼️ Slideshow
+
+![Slide 1](https://github.com/GayanKavinda/record_room_project/blob/Gayan/Project%20Showcase/5.%20Super%20Admin%20Home%20Page.png)
+*Caption for Slide 1*
+
+![Slide 2](https://github.com/GayanKavinda/record_room_project/blob/Gayan/Project%20Showcase/1.%20Start%20Screen.png)
+*Caption for Slide 2*
+
+![Slide 3](https://github.com/GayanKavinda/record_room_project/blob/Gayan/Project%20Showcase/5.%20Super%20Admin%20Home%20Page.png)
+*Caption for Slide 3*
+
+---
+
 ## 🛠️ Installation
 
 1. **Clone the repository**:
