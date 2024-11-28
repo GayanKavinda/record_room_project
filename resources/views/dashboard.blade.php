@@ -8,7 +8,7 @@
                         <h2 class="text-4xl font-extrabold text-white">
                             {{ auth()->user()->name }}'s Dashboard
                         </h2>
-                        <p class="text-gray-200 mt-2 animate-pulse-slow">
+                        <p class="text-sm md:text-base text-gray-200 mt-2 animate-pulse-slow">
                             {{ now()->format('l, F j, Y') }} | 
                             Welcome to your comprehensive system overview
                         </p>
@@ -182,49 +182,61 @@
                                     </svg>
                                     <span>Users</span>
                                 </a>
-
-                                <a href="{{ route('activity.logs') }}" 
-                                   class="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300 transition-transform duration-300 transform hover:scale-105 flex items-center space-x-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                                    </svg>
-                                    <span>File Activity Logs</span>
-                                </a>
-
-                                <a href="{{ route('user.activity.index') }}" 
-                                   class="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300 transition-transform duration-300 transform hover:scale-105 flex items-center space-x-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                                    </svg>
-                                    <span>User Activity Logs</span>
-                                </a>
-
-                                <a href="{{ route('department.activity') }}" 
-                                   class="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300 transition-transform duration-300 transform hover:scale-105 flex items-center space-x-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                                    </svg>
-                                    <span>Department Activity Logs</span>
-                                </a>
-
-                                <a href="{{ route('activity_logs.permission_activity') }}" 
-                                class="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300 transition-transform duration-300 transform hover:scale-105 flex items-center space-x-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                                    </svg>
-                                    <span>Permission Activity Logs</span>
-                                </a>
-
-                                <a href="{{ route('role-activity-logs.index') }}" 
-                                class="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300 transition-transform duration-300 transform hover:scale-105 flex items-center space-x-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                                    </svg>
-                                    <span>Role Activity Logs</span>
-                                </a>
                             </div>
                         @endif
                     </div>
+                </div>
+
+                <!-- Activity Logs Section for Super Admin -->
+                <div class="mt-8 bg-white bg-opacity-80 backdrop-blur-sm p-4 sm:p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
+                    <div class="flex flex-col sm:flex-row justify-between items-center mb-4">
+                        <h2 class="text-xl sm:text-2xl font-semibold text-gray-800 mb-2 sm:mb-0">Activity Logs</h2>
+                        <span class="text-xs sm:text-sm text-gray-600 animate-slide-in-right">Comprehensive system activity tracking</span>
+                    </div>
+                    
+                    @if(auth()->user()->hasRole('super-admin'))
+                        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mt-4">
+                            <a href="{{ route('activity.logs') }}" 
+                            class="bg-gray-200 text-gray-800 px-3 py-2 sm:px-4 sm:py-2 rounded-lg hover:bg-gray-300 transition-transform duration-300 transform hover:scale-105 flex items-center space-x-2 text-sm sm:text-base">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 sm:h-5 w-4 sm:w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                                </svg>
+                                <span>File Activity Logs</span>
+                            </a>
+                            
+                            <a href="{{ route('user.activity.index') }}" 
+                            class="bg-gray-200 text-gray-800 px-3 py-2 sm:px-4 sm:py-2 rounded-lg hover:bg-gray-300 transition-transform duration-300 transform hover:scale-105 flex items-center space-x-2 text-sm sm:text-base">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 sm:h-5 w-4 sm:w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                                </svg>
+                                <span>User Activity Logs</span>
+                            </a>
+                            
+                            <a href="{{ route('department.activity') }}" 
+                            class="bg-gray-200 text-gray-800 px-3 py-2 sm:px-4 sm:py-2 rounded-lg hover:bg-gray-300 transition-transform duration-300 transform hover:scale-105 flex items-center space-x-2 text-sm sm:text-base">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 sm:h-5 w-4 sm:w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                                </svg>
+                                <span>Department Activity Logs</span>
+                            </a>
+                            
+                            <a href="{{ route('activity_logs.permission_activity') }}" 
+                            class="bg-gray-200 text-gray-800 px-3 py-2 sm:px-4 sm:py-2 rounded-lg hover:bg-gray-300 transition-transform duration-300 transform hover:scale-105 flex items-center space-x-2 text-sm sm:text-base">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 sm:h-5 w-4 sm:w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                                </svg>
+                                <span>Permission Activity Logs</span>
+                            </a>
+                            
+                            <a href="{{ route('role-activity-logs.index') }}" 
+                            class="bg-gray-200 text-gray-800 px-3 py-2 sm:px-4 sm:py-2 rounded-lg hover:bg-gray-300 transition-transform duration-300 transform hover:scale-105 flex items-center space-x-2 text-sm sm:text-base">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 sm:h-5 w-4 sm:w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                                </svg>
+                                <span>Role Activity Logs</span>
+                            </a>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>
