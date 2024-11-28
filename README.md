@@ -2,6 +2,8 @@
 
 A Laravel-based application for efficient tracking and management of files, departments, and record locations. The system includes role-based access and permission controls, designed for seamless usage and optimized with Tailwind CSS.
 
+![Record Room Management System](https://github.com/GayanKavinda/record_room_project/blob/Gayan/Project%20Showcase/1.%20Start%20Screen.png)
+
 ## ✨ Features
 
 - 🔒 **Role-Based Access Control**  
@@ -22,6 +24,27 @@ A Laravel-based application for efficient tracking and management of files, depa
 
 - ⚠️ **Error Handling**  
   - Comprehensive validation and error feedback for robust user experience.
+
+---
+
+## 🗂️ Activity Logs
+
+The system includes different sections for tracking activities related to files, users, departments, and permissions. Here's an overview of the activity logs:
+
+- **File Activity Logs**  
+  This log tracks activities related to file operations, such as file creation, modifications, deletions, and status changes. It helps in auditing file management activities and provides transparency in file handling.
+
+- **User Activity Logs**  
+  The user activity log records actions taken by users within the system. This includes logins, updates to user profiles, and changes in permissions or roles. It is vital for monitoring user behavior and ensuring security compliance.
+
+- **Department Activity Logs**  
+  Tracks activities related to department management, such as department creation, updates to department information, and assigning files to departments. This log ensures that all department-related actions are properly documented.
+
+- **Permission Activity Logs**  
+  This log captures all changes in permissions, including granting, revoking, or modifying user permissions for various roles. It is essential for tracking permission adjustments and ensuring the security of the system.
+
+- **Role Activity Logs**  
+  The role activity log monitors changes to user roles, such as role assignments, updates, and removals. It plays a critical role in maintaining a secure and well-organized access control system. *Filtering functionality is available in this section to easily find specific role changes.*
 
 ---
 
@@ -79,8 +102,11 @@ A Laravel-based application for efficient tracking and management of files, depa
 
 The system is built using Laravel MVC with Tailwind CSS for styling. Here’s an overview of key directories:
 
-📁 app/ # Application logic, controllers, and models 📁 routes/ # Route definitions for different user roles 📁 resources/views/ # Blade templates for views
+📁 app/ # Application logic, controllers, and models 
+📁 routes/ # Route definitions for different user roles 
+📁 resources/views/ # Blade templates for views
 
+---
 
 ## ⚙️ Troubleshooting
 
