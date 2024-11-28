@@ -1,5 +1,5 @@
 <x-app-layout>
-    <div class="min-h-screen bg-cover bg-center bg-no-repeat" style="background-image: url('{{ asset('images/anime-girl-color-wheel-5w-1920x1080.jpg') }}'); background-attachment: fixed;">
+    <div class="min-h-screen bg-cover bg-center bg-no-repeat" style="background-image: url('{{ asset('images/anime-girl-color-wheel-5w-1920x1080.jpg') }}'); background-attachment: scroll; background-position: center center;">
         <div class="min-h-screen bg-black bg-opacity-40">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
                 <!-- Advanced Header with Contextual Information -->
@@ -187,6 +187,7 @@
                     </div>
                 </div>
 
+                @if(auth()->user()->hasRole('super-admin'))
                 <!-- Activity Logs Section for Super Admin -->
                 <div class="mt-8 bg-white bg-opacity-80 backdrop-blur-sm p-4 sm:p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
                     <div class="flex flex-col sm:flex-row justify-between items-center mb-4">
@@ -194,7 +195,7 @@
                         <span class="text-xs sm:text-sm text-gray-600 animate-slide-in-right">Comprehensive system activity tracking</span>
                     </div>
                     
-                    @if(auth()->user()->hasRole('super-admin'))
+
                         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mt-4">
                             <a href="{{ route('activity.logs') }}" 
                             class="bg-gray-200 text-gray-800 px-3 py-2 sm:px-4 sm:py-2 rounded-lg hover:bg-gray-300 transition-transform duration-300 transform hover:scale-105 flex items-center space-x-2 text-sm sm:text-base">
