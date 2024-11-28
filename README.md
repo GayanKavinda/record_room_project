@@ -25,6 +25,8 @@ A Laravel-based application for efficient tracking and management of files, depa
 - ⚠️ **Error Handling**  
   - Comprehensive validation and error feedback for robust user experience.
 
+![Record Room Management System](https://github.com/GayanKavinda/record_room_project/blob/Gayan/Project%20Showcase/5.%20Super%20Admin%20Home%20Page.png)
+
 ---
 
 ## 🗂️ Activity Logs
