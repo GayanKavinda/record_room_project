@@ -175,9 +175,9 @@
             </p>
             <p class="text-sm font-semibold">Developed by:</p>
             <p class="text-sm">
-                <a href="#" class="text-yellow-400 hover:text-white transition duration-300">Gayan</a> |
-                <a href="#" class="text-yellow-400 hover:text-white transition duration-300">Didula</a> |
-                <a href="#" class="text-yellow-400 hover:text-white transition duration-300">Nipuna</a>
+                <a href="https://www.linkedin.com/in/gayan-gamlath-k98/" class="text-yellow-400 hover:text-white transition duration-300">Gayan</a> |
+                <a href="https://www.linkedin.com/in/didula-senevirathna-bb86022a2/" class="text-yellow-400 hover:text-white transition duration-300">Didula</a> |
+                <a href="https://www.linkedin.com/in/nipuna-gamage-745a02266/" class="text-yellow-400 hover:text-white transition duration-300">Nipuna</a>
             </p>
         </div>
 
