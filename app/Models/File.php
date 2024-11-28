@@ -14,11 +14,12 @@ class File extends Model
         'responsible_officer',
         'open_date',
         'close_date',
-        'department_no',  // Add this line to make department_no fillable
-        'given_date',      // New field
-        'page_capacity',   // New field
-        'note',            // New field
-        'expire_date',     // New field
+        'department_no',
+        'given_date',
+        'page_capacity',
+        'note',
+        'expire_date',
+        'status', // Add this to allow status updates
     ];
 
     public function department()

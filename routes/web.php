@@ -6,15 +6,29 @@ use App\Http\Controllers\FileController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ActivityLogController;
+use App\Http\Controllers\UserActivityLogController;
+use App\Http\Controllers\DepartmentActivityLogController;
+use App\Http\Controllers\PermissionActivityLogController;
+use App\Models\PermissionActivityLog;
+use App\Http\Controllers\RoleActivityLogController;
 use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
 
 
-
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/about', function () {
+    return view('about');
+})->name('about');
+
+Route::get('/contact', function () {
+    return view('contact');
+})->name('contact');
+
 
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'verified'])
@@ -28,7 +42,32 @@ Route::middleware('auth')->group(function () {
     Route::resource('departments', DepartmentController::class);
     Route::resource('files', FileController::class)->middleware(['role:super-admin|admin|primary-user']);
     Route::put('/files/{id}', [FileController::class, 'update'])->name('files.update');
+    Route::post('/files/send-to-record-room', [FileController::class, 'sendToRecordRoom'])->name('files.sendToRecordRoom');
+});
 
+Route::middleware(['auth', 'role:super-admin'])->group(function () {
+    Route::get('/record-room', [FileController::class, 'recordRoomIndex'])->name('record-room.index');
+    Route::post('/files/{id}/assign-rack-location', [FileController::class, 'assignRackLocation'])->name('files.assignRackLocation');
+    Route::post('/files/{id}/store-record-room', [FileController::class, 'storeRecordRoom'])->name('files.storeRecordRoom');  // New route for storing in record room
+    Route::get('/stored-files', [FileController::class, 'storedFiles'])->name('record-room.storedFiles');
+
+    Route::get('/activity-logs', [ActivityLogController::class, 'index'])->middleware('auth')->name('activity.logs');
+    Route::get('/user-activity', [UserActivityLogController::class, 'index'])->name('user.activity.index');
+    Route::get('/department-activity', [DepartmentActivityLogController::class, 'index'])->name('department.activity');
+    
+    // Define the route with a name for Permission Activity Logs
+    Route::get('/permission-activity-logs', function () {
+        $activityLogs = PermissionActivityLog::with('user')->latest()->paginate(10);
+        return view('activity_logs.permission_activity', compact('activityLogs'));
+    })->name('activity_logs.permission_activity'); // Add the name here
+
+    Route::get('/role-activity-logs', [RoleActivityLogController::class, 'index'])->name('role-activity-logs.index');
+});
+
+
+Route::middleware(['auth', 'role:super-admin|admin|primary-user'])->group(function () {
+    Route::get('/files', [FileController::class, 'index'])->name('files.index');
+    Route::put('/files/{id}', [FileController::class, 'update'])->name('files.update');
 });
 
 Route::group(['middleware' => ['role:super-admin|admin']], function () {
@@ -47,6 +86,17 @@ Route::group(['middleware' => ['role:super-admin|admin']], function () {
         Route::get('users/{userId}/delete', [App\Http\Controllers\UserController::class, 'destroy']);
     });
     
+
+
+
+
+
+
+
+
+
+
+
 
 // Add this route to check admin role permissions
 Route::get('/check-admin-permissions', function() {
@@ -77,5 +127,6 @@ Route::get('/check-super-admin-permissions', function() {
 
     return response()->json($permissions);
 });
+
 
 require __DIR__.'/auth.php';

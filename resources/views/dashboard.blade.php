@@ -1,198 +1,291 @@
 <x-app-layout>
-    <div class="py-12 bg-gray-100">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight mb-4">
-                {{ __('Dashboard') }}
-            </h2>
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
-                    <h1 class="text-3xl font-bold text-gray-800 mb-8">Welcome to Record Room Management System</h1>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <!-- Search Records Card -->
-                        <div class="bg-blue-100 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
-                            <h2 class="text-xl font-semibold mb-4">Search Records</h2>
-                            <form>
-                                <input type="text" placeholder="Search by file number, title, or description" class="w-full p-2 border border-gray-300 rounded mb-4">
-                                <button type="submit" class="w-full bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-transform duration-300 transform hover:scale-105">Search</button>
-                            </form>
-                        </div>
-
-                        <!-- Quick Actions Card -->
-                        <div class="bg-green-100 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
-                            <h2 class="text-xl font-semibold mb-4">Quick Actions</h2>
-                            <ul class="space-y-2">
-                                <li><a href="{{ route('files.index') }}" class="text-green-600 hover:underline">View All Files</a></li>
-                                <li><a href="{{ route('files.create') }}" class="text-green-600 hover:underline">Add New File</a></li>
-                                <li><a href="{{ route('departments.index') }}" class="text-green-600 hover:underline">Manage Departments</a></li>
-                                <div class="flex space-x-2 mt-2">
-                                    <a href="{{ route('roles.index') }}" class="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400 transition-transform duration-300 transform hover:scale-105">Roles</a>
-                                    <a href="{{ route('permissions.index') }}" class="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400 transition-transform duration-300 transform hover:scale-105">Permissions</a>
-                                    <a href="{{ route('users.index') }}" class="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400 transition-transform duration-300 transform hover:scale-105">Users</a>
-                                </div>
-                            </ul>
-                        </div>
-
-                        <!-- System Stats Card -->
-                        <div class="bg-yellow-100 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
-                            <h2 class="text-xl font-semibold mb-4">System Statistics</h2>
-                            <ul class="space-y-2">
-                                <li>Total Records: <span class="font-bold">1,234</span></li>
-                                <li>Active Users: <span class="font-bold">42</span></li>
-                                <li>Categories: <span class="font-bold">15</span></li>
-                            </ul>
-                        </div>
-
-                        <!-- Messages Section -->
-                        <div class="bg-purple-100 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
-                            <h2 class="text-xl font-semibold mb-4">Messages</h2>
-                            <div id="messages">
-                                <div class="message-card cursor-pointer mb-4 p-4 border rounded hover:shadow-lg transition-transform duration-300 transform hover:scale-105" onclick="showMessage('Message Title 1', 'This is the full content of message 1.')">
-                                    <h3 class="font-bold">Message Title 1</h3>
-                                    <p class="text-gray-600">Short description of message 1...</p>
-                                </div>
-                                <div class="message-card cursor-pointer mb-4 p-4 border rounded hover:shadow-lg transition-transform duration-300 transform hover:scale-105" onclick="showMessage('Message Title 2', 'This is the full content of message 2.')">
-                                    <h3 class="font-bold">Message Title 2</h3>
-                                    <p class="text-gray-600">Short description of message 2...</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Recent Activity Section -->
-                        <div class="bg-red-100 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
-                            <h2 class="text-xl font-semibold mb-4">Recent Activity</h2>
-                            <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                                <table class="w-full">
-                                    <thead class="bg-gray-200">
-                                        <tr>
-                                            <th class="px-4 py-2 text-left text-gray-600">Date</th>
-                                            <th class="px-4 py-2 text-left text-gray-600">User</th>
-                                            <th class="px-4 py-2 text-left text-gray-600">Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr class="border-t">
-                                            <td class="px-4 py-2">2024-10-14 09:30</td>
-                                            <td class="px-4 py-2">John Doe</td>
-                                            <td class="px-4 py-2">Added new record: <span class="text-blue-600">REC001</span></td>
-                                        </tr>
-                                        <tr class="border-t">
-                                            <td class="px-4 py-2">2024-10-14 10:15</td>
-                                            <td class="px-4 py-2">Jane Smith</td>
-                                            <td class="px-4 py-2">Updated record: <span class="text-blue-600">REC002</span></td>
-                                        </tr>
-                                        <tr class="border-t">
-                                            <td class="px-4 py-2">2024-10-14 11:00</td>
-                                            <td class="px-4 py-2">Admin User</td>
-                                            <td class="px-4 py-2">Created new category: <span class="text-blue-600">Finance</span></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
-                        <!-- Create Admin Account Card -->
-                        <div class="bg-orange-100 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
-                            <h2 class="text-xl font-semibold mb-4">Create Admin Account</h2>
-                            <button onclick="showAdminForm()" class="w-full bg-orange-600 text-white px-4 py-2 rounded hover:bg-orange-700 transition-transform duration-300 transform hover:scale-105">Create Admin Account</button>
-                        </div>
-
-                        <!-- Popup Modal for Message Content -->
-                        <div id="messageModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
-                            <div class="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
-                                <h2 id="modalTitle" class="text-xl font-bold mb-2"></h2>
-                                <p id="modalContent" class="text-gray-700 mb-4"></p>
-                                <div class="flex justify-between">
-                                    <button class="bg-green-400 text-white px-4 py-1.5 rounded transition-transform duration-300 transform hover:scale-105">Accept</button>
-                                    <button class="bg-red-400 text-white px-4 py-0 rounded transition-transform duration-300 transform hover:scale-105">Reject</button>
-                                    <button onclick="closeMessage()" class="bg-gray-300 text-gray-800 px-4 py-2 rounded transition-transform duration-300 transform hover:scale-105">Cancel</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Popup Modal for Admin Account Creation -->
-                        <div id="adminModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
-                            <div class="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
-                                <h2 class="text-xl font-bold mb-2">Create Admin Account</h2>
-                                <form id="adminForm" action="{{ route('users.store') }}" method="POST">
-                                    @csrf
-                                    <div class="mb-4">
-                                        <label for="employee_id" class="block text-sm font-medium text-gray-700">Employee ID</label>
-                                        <input type="text" id="employee_id" name="employee_id" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
-                                    </div>
-                                    <div class="mb-4">
-                                        <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
-                                        <input type="text" id="name" name="name" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
-                                    </div>
-                                    <div class="mb-4">
-                                        <label for="department_name" class="block text-sm font-medium text-gray-700">Department</label>
-                                        <select name="department_name" id="department_name" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
-                                            <option value="">Select Department</option>
-                                            @foreach($departments as $department)
-                                                <option value="{{ $department->department_name }}">{{ $department->department_name }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="mb-4">
-                                        <label for="join_or_transfer" class="block text-sm font-medium text-gray-700">Join or Transfer</label>
-                                        <select id="join_or_transfer" name="join_or_transfer" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
-                                            <option value="join">Join</option>
-                                            <option value="transfer">Transfer</option>
-                                        </select>
-                                    </div>
-                                    <div class="mb-4">
-                                        <label for="date" class="block text-sm font-medium text-gray-700">Date</label>
-                                        <input type="date" id="date" name="date" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
-                                    </div>
-                                    <div class="mb-4">
-                                        <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-                                        <input type="email" id="email" name="email" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
-                                    </div>
-                                    <div class="mb-4">
-                                        <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-                                        <input type="password" id="password" name="password" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
-                                    </div>
-                                    <div class="flex justify-between">
-                                        <button type="button" onclick="clearForm()" class="bg-gray-300 text-gray-800 px-4 py-2 rounded transition-transform duration-300 transform hover:scale-105">Clear</button>
-                                        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded transition-transform duration-300 transform hover:scale-105">Submit</button>
-                                        <button type="button" onclick="closeAdminForm()" class="bg-red-600 text-white px-4 py-2 rounded transition-transform duration-300 transform hover:scale-105">Cancel</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-
-                        <script>
-                            function showMessage(title, content) {
-                                document.getElementById('modalTitle').innerText = title;
-                                document.getElementById('modalContent').innerText = content;
-                                document.getElementById('messageModal').classList.remove('hidden');
-                            }
-
-                            function closeMessage() {
-                                document.getElementById('messageModal').classList.add('hidden');
-                            }
-
-                            function showAdminForm() {
-                                document.getElementById('adminModal').classList.remove('hidden');
-                            }
-
-
-                            function closeAdminForm() {
-                                document.getElementById('adminModal').classList.add('hidden');
-                            }
-
-                            function clearForm() {
-                                document.getElementById('adminForm').reset();
-                            }
-                        </script>
+    <div class="min-h-screen bg-cover bg-center bg-no-repeat" style="background-image: url('{{ asset('images/anime-girl-color-wheel-5w-1920x1080.jpg') }}'); background-attachment: fixed;">
+        <div class="min-h-screen bg-black bg-opacity-40">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <!-- Advanced Header with Contextual Information -->
+                <div class="flex flex-col md:flex-row justify-between items-center mb-10 animate-fade-in-down">
+                    <div>
+                        <h2 class="text-4xl font-extrabold text-white">
+                            {{ auth()->user()->name }}'s Dashboard
+                        </h2>
+                        <p class="text-sm md:text-base text-gray-200 mt-2 animate-pulse-slow">
+                            {{ now()->format('l, F j, Y') }} | 
+                            Welcome to your comprehensive system overview
+                        </p>
                     </div>
+                    <div class="flex items-center space-x-4 mt-4 md:mt-0">
+                        <div class="flex items-center text-sm text-white animate-slide-in-right">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-blue-300 animate-spin-slow" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <span id="real-time-clock" class="font-semibold">{{ now()->timezone('Asia/Kolkata')->format('Y-m-d h:i:s A') }}</span>                        </div>
+                    </div>
+                </div>
+
+            <!-- Enhanced Stats Grid with More Dynamic Layout -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Departments Card (Super Admin Only) -->
+                @if(auth()->user()->hasRole('super-admin'))
+                    <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border-l-4 border-blue-500 hover:scale-105 animate-fade-in-left">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <h3 class="text-lg font-bold text-gray-700 mb-2">Departments</h3>
+                                <p class="text-4xl font-bold text-blue-500">{{ $departmentCount }}</p>
+                                <p class="text-sm text-gray-500 mt-1">Total Organizational Units</p>
+                            </div>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-blue-300 animate-wiggle" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 4h1m-1 4h1m6-8h1m-1 4h1m-1 4h1m-1 4h1" />
+                            </svg>
+                        </div>
+                    </div>
+                @endif
+                
+                <!-- Files Card -->
+                <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border-l-4 border-green-500 hover:scale-105 animate-fade-in-up">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h3 class="text-lg font-bold text-gray-700 mb-2">Total Files</h3>
+                            <p class="text-4xl font-bold text-green-500">{{ $fileCount }}</p>
+                            <p class="text-sm text-gray-500 mt-1">Active Documents</p>
+                        </div>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-green-300 animate-bounce-slow" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                    </div>
+                </div>
+                
+                <!-- Pending Files Card -->
+                <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border-l-4 border-yellow-500 hover:scale-105 animate-fade-in-right">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h3 class="text-lg font-bold text-gray-700 mb-2">Pending Files</h3>
+                            <p class="text-4xl font-bold text-yellow-500">{{ $pendingFileCount }}</p>
+                            <p class="text-sm text-gray-500 mt-1">Awaiting Processing</p>
+                        </div>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-yellow-300 animate-pulse-slow" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Stats Section with Enhanced Design -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
+                <!-- Stored Files Card -->
+                <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border-l-4 border-purple-500 hover:scale-105 animate-fade-in-down">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h3 class="text-lg font-bold text-gray-700 mb-2">Stored Files</h3>
+                            <p class="text-4xl font-bold text-purple-500">{{ $storedFileCount }}</p>
+                            <p class="text-sm text-gray-500 mt-1">Archive Storage</p>
+                        </div>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-purple-300 animate-slide-in-left" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z" />
+                        </svg>
+                    </div>
+                </div>
+
+                @if(auth()->user()->hasRole('super-admin'))
+                    <!-- Total Users Card -->
+                    <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border-l-4 border-indigo-500 hover:scale-105 animate-fade-in-up">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <h3 class="text-lg font-bold text-gray-700 mb-2">Total Users</h3>
+                                <p class="text-4xl font-bold text-indigo-500">{{ $userCount }}</p>
+                                <p class="text-sm text-gray-500 mt-1">System Participants</p>
+                            </div>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-indigo-300 animate-pulse-slow" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Pending Users Card -->
+                    <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border-l-4 border-orange-500 hover:scale-105 animate-fade-in-down">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <h3 class="text-lg font-bold text-gray-700 mb-2">Pending Users</h3>
+                                <p class="text-4xl font-bold text-orange-500">{{ $pendingUserCount }}</p>
+                                <p class="text-sm text-gray-500 mt-1">Awaiting Approval</p>
+                            </div>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-orange-300 animate-wiggle" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Permissions Card -->
+                    <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border-l-4 border-teal-500 hover:scale-105 animate-fade-in-left">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <h3 class="text-lg font-bold text-gray-700 mb-2">Permissions</h3>
+                                <p class="text-4xl font-bold text-teal-500">{{ $permissionCount }}</p>
+                                <p class="text-sm text-gray-500 mt-1">Access Levels</p>
+                            </div>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-teal-300 animate-slide-in-left" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+                            </svg>
+                        </div>
+                    </div>
+                @endif
+            </div>
+
+            <!-- Advanced Quick Actions Section -->
+            <div class="mt-8 bg-white bg-opacity-80 backdrop-blur-sm p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-2xl font-semibold text-gray-800">Quick Actions</h2>
+                        <span class="text-sm text-gray-600 animate-slide-in-right">Shortcuts to key system functions</span>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <a href="{{ route('files.index') }}" 
+                           class="bg-white p-5 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 flex items-center space-x-3 animate-fade-in-left">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-green-500 animate-wiggle" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                            <span class="text-gray-700 font-medium">View All Files</span>
+                        </a>
+                        <a href="{{ route('files.create') }}" 
+                           class="bg-white p-5 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 flex items-center space-x-3 animate-fade-in-left">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-500 animate-wiggle" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <span class="text-gray-700 font-medium">Add New File</span>
+                        </a>
+                        <a href="{{ route('departments.index') }}" 
+                           class="bg-white p-5 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 flex items-center space-x-3 animate-fade-in-left">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-purple-500 animate-wiggle" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 4h1m-1 4h1m6-8h1m-1 4h1m-1 4h1m-1 4h1" />
+                            </svg>
+                            <span class="text-gray-700 font-medium">Manage Departments</span>
+                        </a>
+
+                        @if(auth()->user()->hasRole('super-admin'))
+                            <div class="col-span-full flex space-x-4 mt-4">
+                                <a href="{{ route('roles.index') }}" 
+                                   class="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300 transition-transform duration-300 transform hover:scale-105 flex items-center space-x-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+                                    </svg>
+                                    <span>Roles</span>
+                                </a>
+                                <a href="{{ route('permissions.index') }}" 
+                                   class="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300 transition-transform duration-300 transform hover:scale-105 flex items-center space-x-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                    </svg>
+                                    <span>Permissions</span>
+                                </a>
+                                <a href="{{ route('users.index') }}" 
+                                   class="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300 transition-transform duration-300 transform hover:scale-105 flex items-center space-x-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                                    </svg>
+                                    <span>Users</span>
+                                </a>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+
+                <!-- Activity Logs Section for Super Admin -->
+                <div class="mt-8 bg-white bg-opacity-80 backdrop-blur-sm p-4 sm:p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
+                    <div class="flex flex-col sm:flex-row justify-between items-center mb-4">
+                        <h2 class="text-xl sm:text-2xl font-semibold text-gray-800 mb-2 sm:mb-0">Activity Logs</h2>
+                        <span class="text-xs sm:text-sm text-gray-600 animate-slide-in-right">Comprehensive system activity tracking</span>
+                    </div>
+                    
+                    @if(auth()->user()->hasRole('super-admin'))
+                        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mt-4">
+                            <a href="{{ route('activity.logs') }}" 
+                            class="bg-gray-200 text-gray-800 px-3 py-2 sm:px-4 sm:py-2 rounded-lg hover:bg-gray-300 transition-transform duration-300 transform hover:scale-105 flex items-center space-x-2 text-sm sm:text-base">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 sm:h-5 w-4 sm:w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                                </svg>
+                                <span>File Activity Logs</span>
+                            </a>
+                            
+                            <a href="{{ route('user.activity.index') }}" 
+                            class="bg-gray-200 text-gray-800 px-3 py-2 sm:px-4 sm:py-2 rounded-lg hover:bg-gray-300 transition-transform duration-300 transform hover:scale-105 flex items-center space-x-2 text-sm sm:text-base">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 sm:h-5 w-4 sm:w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                                </svg>
+                                <span>User Activity Logs</span>
+                            </a>
+                            
+                            <a href="{{ route('department.activity') }}" 
+                            class="bg-gray-200 text-gray-800 px-3 py-2 sm:px-4 sm:py-2 rounded-lg hover:bg-gray-300 transition-transform duration-300 transform hover:scale-105 flex items-center space-x-2 text-sm sm:text-base">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 sm:h-5 w-4 sm:w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                                </svg>
+                                <span>Department Activity Logs</span>
+                            </a>
+                            
+                            <a href="{{ route('activity_logs.permission_activity') }}" 
+                            class="bg-gray-200 text-gray-800 px-3 py-2 sm:px-4 sm:py-2 rounded-lg hover:bg-gray-300 transition-transform duration-300 transform hover:scale-105 flex items-center space-x-2 text-sm sm:text-base">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 sm:h-5 w-4 sm:w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                                </svg>
+                                <span>Permission Activity Logs</span>
+                            </a>
+                            
+                            <a href="{{ route('role-activity-logs.index') }}" 
+                            class="bg-gray-200 text-gray-800 px-3 py-2 sm:px-4 sm:py-2 rounded-lg hover:bg-gray-300 transition-transform duration-300 transform hover:scale-105 flex items-center space-x-2 text-sm sm:text-base">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 sm:h-5 w-4 sm:w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                                </svg>
+                                <span>Role Activity Logs</span>
+                            </a>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>
     </div>
 
-    <?php
-date_default_timezone_set('Asia/Colombo');
-echo date("Y-m-d H:i:s");
-?>
+    @push('scripts')
+    <script>
+    function updateClock() {
+        const clockElement = document.getElementById('real-time-clock');
+        
+        // Create a new Date object
+        const now = new Date();
+        
+        // Options for formatting with AM/PM
+        const options = {
+            timeZone: 'Asia/Kolkata',
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: true  // This enables AM/PM
+        };
+        
+        // Format the time
+        const formatter = new Intl.DateTimeFormat('en-US', options);
+        const parts = formatter.formatToParts(now);
+        
+        // Find the parts we need
+        const year = parts.find(p => p.type === 'year').value;
+        const month = parts.find(p => p.type === 'month').value;
+        const day = parts.find(p => p.type === 'day').value;
+        const hour = parts.find(p => p.type === 'hour').value;
+        const minute = parts.find(p => p.type === 'minute').value;
+        const second = parts.find(p => p.type === 'second').value;
+        const dayPeriod = parts.find(p => p.type === 'dayPeriod').value;
+        
+        // Construct the formatted date string with AM/PM
+        const formattedTime = `${year}-${month}-${day} ${hour}:${minute}:${second} ${dayPeriod}`;
+        
+        clockElement.textContent = formattedTime;
+    }
+    
+    // Initial call to display time immediately
+    updateClock();
+    
+    // Update clock every second
+    setInterval(updateClock, 1000);
+</script>
+    @endpush
 </x-app-layout>

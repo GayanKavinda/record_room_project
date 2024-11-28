@@ -8,6 +8,7 @@ use Spatie\Permission\Models\Permission;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Support\Facades\Auth;
+use App\Models\RoleActivityLog; // Import the RoleActivityLog model
 
 class RoleController extends Controller
 {
@@ -37,10 +38,22 @@ class RoleController extends Controller
         ]);
 
         // Create a new role
-        Role::create([
+        // Role::create([
+        //     'name' => $request->name
+        // ]);
+
+        // Create a new role and assign it to $role
+        $role = Role::create([
             'name' => $request->name
         ]);
 
+        // Log the role activity
+        RoleActivityLog::create([
+            'user_id' => Auth::id(),
+            'role_id' => $role->id, // Use the $role variable
+            'details' => 'Role created: ' . $role->name, // Add dynamic details here
+        ]);
+        
         return redirect()->route('roles.index')->with('success', 'Role created successfully');
     }
 
@@ -64,6 +77,13 @@ class RoleController extends Controller
             'name' => $request->name
         ]);
 
+        // Log the role activity
+        RoleActivityLog::create([
+            'user_id' => Auth::id(),
+            'role_id' => $role->id,
+            'details' => 'Role updated: ' . $role->name // Ensure details is populated
+        ]);
+        
         return redirect()->route('roles.index')->with('success', 'Role updated successfully');
     }
 
@@ -75,6 +95,13 @@ class RoleController extends Controller
         if (!$role) {
             return redirect('roles')->with('error', 'Role not found.');
         }
+
+        // Log the activity before deleting the role
+        RoleActivityLog::create([
+            'user_id' => Auth::id(),
+            'role_id' => $role->id,
+            'details' => 'Role deleted: ' . $role->name
+        ]);
 
         // Delete the role
         $role->delete();
@@ -91,6 +118,13 @@ class RoleController extends Controller
             ->pluck('role_has_permissions.permission_id', 'role_has_permissions.permission_id')
             ->all();
 
+        // Log activity: View permission page for a specific role
+        RoleActivityLog::create([
+            'user_id' => Auth::id(),
+            'role_id' => $role->id,
+            'details' => 'Viewed permissions for role: ' . $role->name
+        ]);
+        
         return view('role-permission.role.add-permissions', [
             'role' => $role,
             'permissions' => $permissions,
@@ -105,8 +139,25 @@ class RoleController extends Controller
         ]);
 
         $role = Role::findOrFail($roleId);
+        // Get previous permissions before syncing
+        $previousPermissions = $role->permissions->pluck('name')->toArray();
+
+        // Sync the permissions
         $role->syncPermissions($request->permission);
 
+        // Get the newly assigned permissions
+        $newPermissions = $role->permissions->pluck('name')->toArray();
+
+
+        // Log the role activity
+        RoleActivityLog::create([
+            'user_id' => Auth::id(),
+            'role_id' => $role->id,
+            'details' => 'Assigned permissions to role: ' . $role->name . 
+                        '. Previous: [' . implode(', ', $previousPermissions) . '], ' . 
+                        'New: [' . implode(', ', $newPermissions) . ']'
+        ]);
+        
         return redirect()->back()->with('success', 'Permissions added to role');
     }
 }

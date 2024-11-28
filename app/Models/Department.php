@@ -13,5 +13,5 @@ class Department extends Model
     protected $table = 'departments'; // Ensure this is correct
 
     // Specify the fillable attributes if using mass assignment
-    protected $fillable = ['department_name']; // Use 'department_name' as your column name
+    protected $fillable = ['department_name', 'department_no']; // Use 'department_name' as your column name
 }

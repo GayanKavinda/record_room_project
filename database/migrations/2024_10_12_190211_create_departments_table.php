@@ -17,6 +17,9 @@ return new class extends Migration
             $table->bigInteger('department_no')->unique(); // BigInteger for department_no
             $table->timestamps();
         });
+
+        // Change the charset and collation after the table creation
+        DB::statement('ALTER TABLE departments CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci');
     }
 
     /**
