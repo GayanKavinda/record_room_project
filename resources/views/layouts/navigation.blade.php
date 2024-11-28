@@ -17,12 +17,12 @@
                     {{ __('Home') }}
                 </x-nav-link>
                 <!-- Add Record Room and Stored Files -->
-    <x-nav-link :href="route('record-room.index')" :active="request()->routeIs('record-room.index')" class="text-gray-300 hover:text-white transition">
-        {{ __('Record Room') }}
-    </x-nav-link>
-    <x-nav-link :href="route('record-room.storedFiles')" :active="request()->routeIs('record-room.storedFiles')" class="text-gray-300 hover:text-white transition">
-        {{ __('Stored Files') }}
-    </x-nav-link>
+                <x-nav-link :href="route('record-room.index')" :active="request()->routeIs('record-room.index')" class="text-gray-300 hover:text-white transition">
+                    {{ __('Record Room') }}
+                </x-nav-link>
+                <x-nav-link :href="route('record-room.storedFiles')" :active="request()->routeIs('record-room.storedFiles')" class="text-gray-300 hover:text-white transition">
+                    {{ __('Stored Files') }}
+                </x-nav-link>
                 <x-nav-link :href="route('about')" :active="request()->routeIs('about')" class="text-gray-300 hover:text-white transition">
                     {{ __('About') }}
                 </x-nav-link>

@@ -31,19 +31,19 @@ A Laravel-based application for efficient tracking and management of files, depa
 
 The system includes different sections for tracking activities related to files, users, departments, and permissions. Here's an overview of the activity logs:
 
-- **File Activity Logs**  
+- 🗃️ **File Activity Logs**  
   This log tracks activities related to file operations, such as file creation, modifications, deletions, and status changes. It helps in auditing file management activities and provides transparency in file handling.
 
-- **User Activity Logs**  
+- 👤 **User Activity Logs**  
   The user activity log records actions taken by users within the system. This includes logins, updates to user profiles, and changes in permissions or roles. It is vital for monitoring user behavior and ensuring security compliance.
 
-- **Department Activity Logs**  
+- 🏢 **Department Activity Logs**  
   Tracks activities related to department management, such as department creation, updates to department information, and assigning files to departments. This log ensures that all department-related actions are properly documented.
 
-- **Permission Activity Logs**  
+- 🔑 **Permission Activity Logs**  
   This log captures all changes in permissions, including granting, revoking, or modifying user permissions for various roles. It is essential for tracking permission adjustments and ensuring the security of the system.
 
-- **Role Activity Logs**  
+- ⚙️ **Role Activity Logs**  
   The role activity log monitors changes to user roles, such as role assignments, updates, and removals. It plays a critical role in maintaining a secure and well-organized access control system. *Filtering functionality is available in this section to easily find specific role changes.*
 
 ---
