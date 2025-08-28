@@ -240,7 +240,7 @@
                 <div class="inline-flex items-center space-x-2">
                     <!-- Previous Button -->
                     @if ($files->onFirstPage())
-                        <span class="px-3 py-1 text-gray-500 bg-gray-100 cursor-not-allowed">Previous</span>
+                        <span class="rounded-lg px-3 py-1 text-gray-500 bg-gray-100 cursor-not-allowed">Previous</span>
                     @else
                         <a href="{{ $files->previousPageUrl() }}" class="px-3 py-1 text-blue-600 hover:text-blue-800">Previous</a>
                     @endif
@@ -248,7 +248,7 @@
                     <!-- Page Numbers -->
                     @foreach ($files->getUrlRange(max(1, $files->currentPage() - 5), min($files->lastPage(), $files->currentPage() + 5)) as $page => $url)
                         @if ($page == $files->currentPage())
-                            <span class="px-3 py-1 text-white bg-blue-600">{{ $page }}</span>
+                            <span class="rounded-lg px-3 py-1 text-white bg-blue-600">{{ $page }}</span>
                         @else
                             <a href="{{ $url }}" class="px-3 py-1 text-blue-600 hover:text-blue-800">{{ $page }}</a>
                         @endif
@@ -258,7 +258,7 @@
                     @if ($files->hasMorePages())
                         <a href="{{ $files->nextPageUrl() }}" class="px-3 py-1 text-blue-600 hover:text-blue-800">Next</a>
                     @else
-                        <span class="px-3 py-1 text-gray-500 bg-gray-100 cursor-not-allowed">Next</span>
+                        <span class="rounded-lg px-3 py-1 text-gray-500 bg-gray-100 cursor-not-allowed">Next</span>
                     @endif
                 </div>
 
